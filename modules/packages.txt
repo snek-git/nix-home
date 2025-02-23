@@ -84,3 +84,5 @@ pycharm-community
 _1password-gui
 _1password-cli
 warp-terminal
+libgcc
+obs-studio

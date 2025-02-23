@@ -51,35 +51,43 @@ search_package() {
     local search_result
     
     if [ -z "$query" ]; then
-        # Interactive search with fzf
-        search_result=$(nix search nixpkgs --json | 
-            jq -r 'to_entries | .[] | "\(.key)|\(.value.description)|\(.value.version)"' |
-            column -t -s '|' |
-            fzf --ansi \
-                --height 50% \
-                --preview 'nix eval nixpkgs#{1} --raw' \
-                --preview-window=right:50%:wrap \
-                --header 'Press ENTER to select a package, ESC to cancel' \
-                --bind 'enter:execute(echo {1})+abort')
+        # Use fzf's built-in search capabilities with debounce
+        search_result=$(echo "" | fzf --ansi \
+            --height 50% \
+            --header 'Type to search packages (search starts after you stop typing). Press ENTER to select, ESC to cancel' \
+            --preview 'package=$(echo {} | cut -d" " -f1); [ -n "$package" ] && nix eval nixpkgs#$package --raw 2>/dev/null || echo "Start typing to search packages..."' \
+            --preview-window=right:50%:wrap \
+            --bind "change:reload(sleep 0.3; if [ -n {q} ]; then nix search nixpkgs {q} --json 2>/dev/null | jq -r 'to_entries | .[] | . += {score: (if .key | test(\"\\\\b{q}\\\\b\") then 0 elif .key | test(\"^{q}[^-]*$\") then 1 elif .key | test(\"^{q}\") then 2 elif .key | test(\"-{q}[^-]*$\") then 3 elif .key | test(\"-{q}\") then 4 else 5 end)} | sort_by(.score, .key | length) | .[] | \"\(.key)|\(.value.description)|\(.value.version)\"' | column -t -s '|'; else echo 'Type to search for packages...'; fi)" \
+            --disabled \
+            --tiebreak=begin,length,index)
     else
         echo -e "${YELLOW}Searching for package: $query${NC}"
-        search_result=$(nix search nixpkgs "$query" --json |
-            jq -r 'to_entries | .[] | "\(.key)|\(.value.description)|\(.value.version)"' |
+        search_result=$(nix search nixpkgs "$query" --json 2>/dev/null | 
+            jq -r 'to_entries | .[] | . += {score: (if .key | test("\\b'$query'\\b") then 0 elif .key | test("^'$query'[^-]*$") then 1 elif .key | test("^'$query'") then 2 elif .key | test("-'$query'[^-]*$") then 3 elif .key | test("-'$query'") then 4 else 5 end)} | sort_by(.score, .key | length) | .[] | "\(.key)|\(.value.description)|\(.value.version)"' |
             column -t -s '|' |
             fzf --ansi \
                 --height 50% \
-                --preview 'nix eval nixpkgs#{1} --raw' \
+                --preview 'package=$(echo {} | cut -d" " -f1); nix eval nixpkgs#$package --raw 2>/dev/null || echo "No preview available"' \
                 --preview-window=right:50%:wrap \
-                --header 'Press ENTER to select a package, ESC to cancel' \
-                --bind 'enter:execute(echo {1})+abort')
+                --header 'Press ENTER to select a package, ESC to cancel')
     fi
 
+    # Check if user selected anything
     if [ -z "$search_result" ]; then
         echo -e "${RED}No package selected${NC}"
         return 1
     fi
 
-    echo "$search_result"
+    # Extract just the package name from the selected line and remove any Nix attribute prefixes
+    package_name=$(echo "$search_result" | cut -d' ' -f1 | sed -E 's/^(legacyPackages\.[^.]+\.|nixpkgs\.|pkgs\.|haskellPackages\.|pythonPackages\.|nodePackages\.|rubyPackages\.|perlPackages\.|luaPackages\.|ocamlPackages\.|goPackages\.|rustPackages\.|phpPackages\.)//')
+
+    # Verify the package exists
+    if ! nix-instantiate --eval -E "with import <nixpkgs> {}; $package_name" &>/dev/null; then
+        echo -e "${RED}Selected package '$package_name' not found or invalid${NC}"
+        return 1
+    fi
+
+    echo "$package_name"
 }
 
 remove_package() {
