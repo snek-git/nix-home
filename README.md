@@ -73,44 +73,11 @@ nix-update -h
 
 ## Package Management
 
-### Nix Packages
-All Nix packages are managed in `modules/packages.nix`. To manage packages:
-1. Use `nix-install` to search and install packages
-2. Packages are automatically added to your configuration
-3. Use `nix-update` to update your system
-
-### Package Storage and Handling
-
-The package management system is designed to be declarative and reproducible:
-
-1. **Package List**: 
-   - All packages are listed in `modules/packages.txt`
-   - Each package is stored on its own line
-   - The file is automatically managed by `nix-install`
-
-2. **Package Installation**:
-   - When you run `nix-install -i package-name`:
-     1. The script verifies the package exists in nixpkgs
-     2. Adds it to `packages.txt`
-     3. Creates a backup before modifying
-     4. Automatically rebuilds your home-manager configuration
-
-3. **Package Removal**:
-   - When you run `nix-install -r package-name`:
-     1. The script removes the package from `packages.txt`
-     2. Creates a backup before modifying
-     3. Automatically rebuilds your configuration
-     4. Rolls back changes if the rebuild fails
-
-4. **Package Updates**:
-   - Packages are updated through the normal Nix channels
-   - Running `nix-update` will update all packages to their latest versions
-   - Individual packages always match the version in your current Nix channel
-
-5. **Rollback Safety**:
-   - All operations create backups before modifying
-   - Failed operations automatically roll back to the previous state
-   - Your system remains in a working state even if operations fail
+Packages are managed through `modules/packages.txt` and handled by the `nix-install` script. The script automatically:
+- Verifies packages exist in nixpkgs
+- Maintains a backup of the package list
+- Rebuilds home-manager after changes
+- Rolls back on failures
 
 ## Updating
 
