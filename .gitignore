@@ -13,4 +13,18 @@ zen-browser-flake/
 
 # Nix
 *.qcow2
-.pre-commit-config.yaml 
+.pre-commit-config.yaml
+
+# Editor specific files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS specific files
+.DS_Store
+.directory
+.Trash-*
+
+# Nix specific
+.envrc 
