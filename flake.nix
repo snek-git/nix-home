@@ -10,7 +10,7 @@
     zen-browser.url = "github:snek-git/zen-browser-flake";
   };
 
-  outputs = { nixpkgs, home-manager, zen-browser, ... }:
+  outputs = { self, nixpkgs, home-manager, zen-browser, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -19,19 +19,23 @@
       };
     in
     {
-      homeConfigurations."snek" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [ 
-          ./home.nix
-          {
-            home = {
-              packages = [
-                zen-browser.packages.${system}.default
-              ];
-            };
-            nixpkgs.config.allowUnfree = true;
-          }
-        ];
+      homeConfigurations = {
+        "snek" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [ 
+            ./home.nix
+            {
+              home = {
+                username = "snek";
+                homeDirectory = "/home/snek";
+                packages = [
+                  zen-browser.packages.${system}.default
+                ];
+              };
+              nixpkgs.config.allowUnfree = true;
+            }
+          ];
+        };
       };
     };
 }
