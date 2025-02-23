@@ -1,0 +1,16 @@
+# Nix build outputs
+result
+result-*
+
+# System configuration
+configuration.nix
+
+# Project-specific
+zen-browser-flake/
+
+# Direnv
+.direnv/
+
+# Nix
+*.qcow2
+.pre-commit-config.yaml 
