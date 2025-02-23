@@ -6,6 +6,17 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Check for required dependencies
+if ! command -v fzf >/dev/null 2>&1; then
+    echo -e "${RED}Error: fzf is required but not installed${NC}"
+    exit 1
+fi
+
+if ! command -v jq >/dev/null 2>&1; then
+    echo -e "${RED}Error: jq is required but not installed${NC}"
+    exit 1
+fi
+
 # Debug: Show script resolution
 echo -e "${YELLOW}Script source: ${BASH_SOURCE[0]}${NC}"
 echo -e "${YELLOW}Resolved script: $(readlink -f "${BASH_SOURCE[0]}")${NC}"
@@ -24,41 +35,77 @@ fi
 
 print_help() {
     echo "Nix Package Installer"
-    echo "Usage: nix-install [OPTIONS] PACKAGE_NAME"
+    echo "Usage: nix-install [OPTIONS] [PACKAGE_NAME]"
     echo ""
     echo "Options:"
-    echo "  -s, --search    Search for a package"
+    echo "  -s, --search    Search for a package (uses fzf)"
     echo "  -i, --install   Install and add package to home-manager config"
-    echo "  -r, --remove    Remove package from home-manager config"
+    echo "  -r, --remove    Remove package from home-manager config (uses fzf)"
     echo "  --help         Show this help message"
+    echo ""
+    echo "If no package name is provided with -s or -i, fzf will be used for selection"
 }
 
 search_package() {
     local query=$1
-    echo -e "${YELLOW}Searching for package: $query${NC}"
-    
-    # Use nix search with --json for better parsing
     local search_result
-    search_result=$(nix search nixpkgs $query --json)
     
-    if [ $? -ne 0 ] || [ "$search_result" = "{}" ]; then
-        echo -e "${RED}No packages found matching '$query'${NC}"
+    if [ -z "$query" ]; then
+        # Interactive search with fzf
+        search_result=$(nix search nixpkgs --json | 
+            jq -r 'to_entries | .[] | "\(.key)|\(.value.description)|\(.value.version)"' |
+            column -t -s '|' |
+            fzf --ansi \
+                --height 50% \
+                --preview 'nix eval nixpkgs#{1} --raw' \
+                --preview-window=right:50%:wrap \
+                --header 'Press ENTER to select a package, ESC to cancel' \
+                --bind 'enter:execute(echo {1})+abort')
+    else
+        echo -e "${YELLOW}Searching for package: $query${NC}"
+        search_result=$(nix search nixpkgs "$query" --json |
+            jq -r 'to_entries | .[] | "\(.key)|\(.value.description)|\(.value.version)"' |
+            column -t -s '|' |
+            fzf --ansi \
+                --height 50% \
+                --preview 'nix eval nixpkgs#{1} --raw' \
+                --preview-window=right:50%:wrap \
+                --header 'Press ENTER to select a package, ESC to cancel' \
+                --bind 'enter:execute(echo {1})+abort')
+    fi
+
+    if [ -z "$search_result" ]; then
+        echo -e "${RED}No package selected${NC}"
         return 1
     fi
-    
-    # Parse and display results in a nice format
-    echo "$search_result" | jq -r 'to_entries | .[] | "\n\(.key):\n  \(.value.description)\n  Version: \(.value.version)"'
+
+    echo "$search_result"
 }
 
 remove_package() {
     local package=$1
+    
+    if [ -z "$package" ]; then
+        # Interactive package selection for removal
+        package=$(cat "$PACKAGES_FILE" |
+            fzf --ansi \
+                --height 50% \
+                --preview 'nix eval nixpkgs#{} --raw' \
+                --preview-window=right:50%:wrap \
+                --header 'Select a package to remove (Press ENTER to select, ESC to cancel)')
+        
+        if [ -z "$package" ]; then
+            echo -e "${RED}No package selected for removal${NC}"
+            return 1
+        fi
+    fi
     
     echo -e "${YELLOW}Removing $package from Home Manager config...${NC}"
     
     # Check if package exists in the file
     if ! grep -Fx "$package" "$PACKAGES_FILE" > /dev/null 2>&1; then
         echo -e "${RED}Package '$package' is not installed!${NC}"
-        exit 1
+        return 1
     fi
     
     # Create a backup
@@ -77,30 +124,34 @@ remove_package() {
     else
         echo -e "${RED}Failed to update configuration. Rolling back changes...${NC}"
         mv "${PACKAGES_FILE}.bak" "$PACKAGES_FILE"
-        exit 1
+        return 1
     fi
 }
 
 install_package() {
     local package=$1
     
+    if [ -z "$package" ]; then
+        # Interactive package selection for installation
+        package=$(search_package)
+        if [ -z "$package" ]; then
+            return 1
+        fi
+    fi
+    
     # First, verify the package exists
     if ! nix-instantiate --eval -E "with import <nixpkgs> {}; ${package}" &>/dev/null; then
         echo -e "${RED}Package '$package' not found or invalid!${NC}"
-        exit 1
+        return 1
     fi
 
     echo -e "${YELLOW}Adding $package to Home Manager config...${NC}"
     
-    # Debug: Show current packages
-    echo -e "${YELLOW}Current packages in $PACKAGES_FILE:${NC}"
-    cat "$PACKAGES_FILE"
-    
-    # Check if package is already installed (more precise check)
+    # Check if package is already installed
     if grep -Fx "$package" "$PACKAGES_FILE" > /dev/null 2>&1; then
         echo -e "${YELLOW}Package '$package' is already installed!${NC}"
         grep -n "$package" "$PACKAGES_FILE"
-        exit 0
+        return 0
     fi
     
     # Create a backup
@@ -121,7 +172,7 @@ install_package() {
     else
         echo -e "${RED}Failed to update configuration. Rolling back changes...${NC}"
         mv "${PACKAGES_FILE}.bak" "$PACKAGES_FILE"
-        exit 1
+        return 1
     fi
 }
 
@@ -137,17 +188,17 @@ while [[ $# -gt 0 ]]; do
         -s|--search)
             shift
             search_package "$1"
-            shift
+            exit $?
             ;;
         -i|--install)
             shift
             install_package "$1"
-            shift
+            exit $?
             ;;
         -r|--remove)
             shift
             remove_package "$1"
-            shift
+            exit $?
             ;;
         --help)
             print_help

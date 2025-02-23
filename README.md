@@ -37,22 +37,28 @@ home-manager switch --flake .#snek
   - `services/`: Service configurations
   - `packages.nix`: List of all installed packages
   - `scripts/`: Helper scripts for managing the system
-    - `nix-install`: Package management script
+    - `nix-install`: Package management script with fzf integration
     - `nix-update`: System update script
 
 ## Scripts
 
 ### nix-install
-A package management script for easily searching, installing, and removing packages:
+Interactive package management with fuzzy search:
 ```bash
-# Search for a package
+# Interactive package search
+nix-install -s
+
+# Search specific package
 nix-install -s package-name
 
-# Install a package
+# Interactive package install
+nix-install -i
+
+# Install specific package
 nix-install -i package-name
 
-# Remove a package
-nix-install -r package-name
+# Interactive package removal
+nix-install -r
 ```
 
 ### nix-update
