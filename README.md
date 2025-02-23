@@ -36,24 +36,48 @@ home-manager switch --flake .#snek
   - `desktop/`: Desktop environment configurations
   - `services/`: Service configurations
   - `packages.nix`: List of all installed packages
-- `scripts/`: Custom scripts and utilities
-  - `packages.txt`: List of packages to be installed via pip/npm/etc.
-  - `install_packages.sh`: Script to install packages from packages.txt
-  - `update_packages.sh`: Script to update packages.txt with current pip/npm packages
+  - `scripts/`: Helper scripts for managing the system
+    - `nix-install.sh`: Package management script
+    - `nix-update.sh`: System update script
+
+## Scripts
+
+### nix-install.sh
+A package management script for easily searching, installing, and removing packages:
+```bash
+# Search for a package
+./modules/scripts/nix-install.sh -s package-name
+
+# Install a package
+./modules/scripts/nix-install.sh -i package-name
+
+# Remove a package
+./modules/scripts/nix-install.sh -r package-name
+```
+
+### nix-update.sh
+A system update script with various options:
+```bash
+# Update everything (channels, system, and home-manager)
+./modules/scripts/nix-update.sh -a
+
+# Update only channels
+./modules/scripts/nix-update.sh -c
+
+# Update only system configuration
+./modules/scripts/nix-update.sh -s
+
+# Update only home-manager configuration
+./modules/scripts/nix-update.sh -h
+```
 
 ## Package Management
 
 ### Nix Packages
-All Nix packages are managed in `modules/packages.nix`. To add a new package:
-1. Find it on [search.nixos.org](https://search.nixos.org)
-2. Add it to the packages list in `modules/packages.nix`
-3. Run `home-manager switch --flake .#snek`
-
-### External Packages (pip, npm, etc.)
-Non-Nix packages are managed through `scripts/packages.txt`:
-- To install listed packages: `./scripts/install_packages.sh`
-- To update packages.txt with current packages: `./scripts/update_packages.sh`
-- Format: `type:package_name:version` (e.g., `pip:requests:2.28.1`)
+All Nix packages are managed in `modules/packages.nix`. To manage packages:
+1. Use `nix-install.sh` script to search and install packages
+2. Packages are automatically added to your configuration
+3. Use `nix-update.sh` to update your system
 
 ## Updating
 
@@ -62,12 +86,9 @@ To update all flake inputs:
 nix flake update
 ```
 
-To update and apply changes:
+To update your entire system:
 ```bash
-home-manager switch --flake .#snek
+./modules/scripts/nix-update.sh -a
 ```
 
-To update external packages:
-```bash
-./scripts/update_packages.sh  # Updates packages.txt
-./scripts/install_packages.sh # Installs/updates packages from packages.txt 
+To update specific components, use the appropriate flags with `nix-update.sh` as shown in the Scripts section. 
