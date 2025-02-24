@@ -35,10 +35,46 @@ home-manager switch --flake .#snek
   - `programs/`: Program-specific configurations
   - `desktop/`: Desktop environment configurations
   - `services/`: Service configurations
+  - `hyprland/`: Hyprland window manager configuration
   - `packages.nix`: List of all installed packages
   - `scripts/`: Helper scripts for managing the system
     - `nix-install`: Package management script with fzf integration
     - `nix-update`: System update script
+
+## Keybinds
+
+### Core
+- `Super + Return`: Open terminal (Kitty)
+- `Super + Space`: Open application launcher (Wofi)
+- `Super + B`: Open browser
+- `Super + E`: Open file manager
+- `Super + Q`: Close active window
+- `Super + M`: Exit Hyprland
+- `Super + V`: Toggle floating window
+- `Super + J`: Toggle split direction
+
+### Window Management
+- `Super + Arrow`: Focus window in direction
+- `Super + Shift + Arrow`: Move window in direction
+- `Super + [1-0]`: Switch to workspace
+- `Super + Shift + [1-0]`: Move window to workspace
+- `Super + Mouse1`: Move window
+- `Super + Mouse2`: Resize window
+- `Super + R`: Enter resize mode
+  - Use arrow keys to resize, Escape to exit
+
+### Media Controls
+- `Volume Keys`: Control volume
+- `Media Keys`: Control media playback
+- `Brightness Keys`: Control screen brightness
+
+### Screenshots
+- `Print`: Screenshot selected area (to clipboard)
+- `Super + Print`: Screenshot selected area (to file)
+- `Super + Shift + Print`: Screenshot full screen
+
+### Other
+- `Super + Alt + W`: Cycle through wallpapers
 
 ## Scripts
 
