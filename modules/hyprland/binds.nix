@@ -8,7 +8,7 @@
     $mainMod = SUPER
     $terminal = kitty
     $menu = wofi --show drun
-    $browser = .zen-wrapped
+    $browser = zen
     $fileManager = dolphin
 
     bind = $mainMod, RETURN, exec, $terminal
