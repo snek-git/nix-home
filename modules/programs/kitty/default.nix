@@ -22,12 +22,14 @@
       hide_window_decorations = "yes";
       initial_window_width = "120c";
       initial_window_height = "35c";
-      confirm_os_window_close = 0;
       placement_strategy = "center";
       resize_in_steps = "yes";
       enable_audio_bell = "no";
       visual_bell_duration = "0.1";
       remember_window_size = "no";
+      
+      # Disable confirmation
+      confirm_os_window_close = 0;
       
       # Tab bar
       tab_bar_edge = "bottom";

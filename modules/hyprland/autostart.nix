@@ -5,7 +5,6 @@
   ...
 }: {
   wayland.windowManager.hyprland.extraConfig = ''
-    exec-once = waybar
     exec-once = dunst
     exec-once = nm-applet --indicator
     exec-once = blueman-applet

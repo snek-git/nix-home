@@ -7,6 +7,10 @@
   programs.waybar = {
     enable = true;
     systemd.enable = true;
+    package = pkgs.waybar.override {
+      wireplumberSupport = true;
+      pulseSupport = true;
+    };
     settings = {
       mainBar = {
         layer = "top";
@@ -23,7 +27,8 @@
           "network"
           "cpu"
           "memory"
-          "pulseaudio"
+          "temperature"
+          "wireplumber"
           "tray"
         ];
 
@@ -53,18 +58,29 @@
         };
 
         "cpu" = {
-          format = " {usage}%";
+          format = "CPU: {usage}%";
           tooltip = true;
           interval = 1;
         };
 
+        "temperature" = {
+          hwmon-path = "/sys/class/hwmon/hwmon3/temp1_input";
+          critical-threshold = 85;
+          format = "{icon} {temperatureC}°C";
+          format-icons = ["" "" "" "" ""];
+          interval = 2;
+          tooltip = true;
+          tooltip-format = "CPU Temperature: {temperatureC}°C";
+        };
+
         "memory" = {
-          format = " {}%";
+          format = "RAM: {}%";
           tooltip-format = "Memory: {used:0.1f}GB/{total:0.1f}GB";
           interval = 1;
         };
 
         "network" = {
+          interface = "enp*";
           format-wifi = "{essid} ({signalStrength}%) ";
           format-ethernet = " {ipaddr}/{cidr}";
           tooltip-format = " {ifname} via {gwaddr}";
@@ -74,10 +90,10 @@
           interval = 1;
         };
 
-        "pulseaudio" = {
+        "wireplumber" = {
           format = "{volume}% {icon}";
           format-bluetooth = "{volume}% {icon}";
-          format-muted = "";
+          format-muted = "󰝟";
           format-icons = {
             headphone = "";
             hands-free = "";
@@ -85,15 +101,15 @@
             phone = "";
             portable = "";
             car = "";
-            default = ["" "" ""];
+            default = ["󰕿" "󰖀" "󰕾"];
           };
           scroll-step = 5;
           on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
           on-click-right = "pavucontrol";
-          on-scroll-up = "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+";
+          on-scroll-up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
           on-scroll-down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+          max-volume = 150;
           tooltip = true;
-          tooltip-format = "Volume: {volume}%\nMuted: {muted}\nDevice: {desc}";
         };
 
         "tray" = {
@@ -142,9 +158,10 @@
       #window,
       #clock,
       #cpu,
+      #temperature,
       #memory,
       #network,
-      #pulseaudio,
+      #wireplumber,
       #tray {
         padding: 0 10px;
         margin: 2px 4px;
@@ -170,12 +187,25 @@
         color: #00bfff;
       }
 
-      #pulseaudio {
+      #temperature {
+        color: #ff3c3c;
+        margin-left: 0;
+        padding-left: 4px;
+      }
+
+      #temperature.critical {
+        background-color: #ff3c3c;
+        color: #0a0a14;
+      }
+
+      #wireplumber {
         color: #03fff7;
       }
 
       #cpu {
         color: #73c936;
+        margin-right: 0;
+        padding-right: 4px;
       }
 
       #memory {
@@ -196,4 +226,14 @@
       }
     '';
   };
+
+  # Add required packages for Waybar functionality
+  home.packages = with pkgs; [
+    wireplumber # For better audio control
+    iw # For better network interface detection
+    pavucontrol # GUI for audio control
+    lm_sensors # For temperature monitoring
+    gtk3 # For GTK3 support
+    gtk4 # For GTK4 support
+  ];
 } 
