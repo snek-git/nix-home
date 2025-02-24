@@ -24,7 +24,7 @@
     waybar          # Status bar
     wofi            # Application launcher (used in binds.nix)
     dunst           # Notification daemon (used in autostart.nix)
-    swww            # Wallpaper daemon (used in autostart.nix)
+    swww            # Wallpaper daemon
     kitty           # Terminal emulator
     
     # Screenshot utilities (used in binds.nix)

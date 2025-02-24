@@ -23,7 +23,12 @@
 
     # Input configuration
     input {
-        kb_layout = us
+        kb_layout = us,am
+        kb_variant =
+        kb_model =
+        kb_options = grp:alt_shift_toggle
+        kb_rules =
+
         follow_mouse = 1
         touchpad {
             natural_scroll = true
@@ -40,6 +45,7 @@
         col.active_border = rgba(33ccffee)
         col.inactive_border = rgba(595959aa)
         layout = dwindle
+        allow_tearing = false
     }
 
     # Decoration configuration
@@ -47,24 +53,33 @@
         rounding = 0
         blur {
             enabled = true
-            size = 5
+            size = 8
             passes = 2
+            contrast = 1.0
+            brightness = 1.0
+            noise = 0.02
+            vibrancy = 0.2
+            special = true
             new_optimizations = true
-            xray = true
             ignore_opacity = false
         }
+
+        dim_inactive = false
+        dim_strength = 0.1
         active_opacity = 1.0
-        inactive_opacity = 1.0
+        inactive_opacity = 0.95
         fullscreen_opacity = 1.0
     }
 
     # Animation configuration
     animations {
         enabled = true
-        animation = windows, 1, 1, default
-        animation = border, 1, 1, default
-        animation = fade, 1, 1, default
-        animation = workspaces, 1, 1, default
+        bezier = myBezier, 0.05, 0.9, 0.1, 1.05
+        animation = windows, 1, 7, myBezier
+        animation = windowsOut, 1, 7, default, popin 80%
+        animation = border, 1, 10, default
+        animation = fade, 1, 7, default
+        animation = workspaces, 1, 6, default
     }
 
     # Layout configuration
@@ -91,13 +106,9 @@
     windowrule = float, ^(org.kde.polkit-kde-authentication-agent-1)$
     
     # Terminal rules
-    windowrulev2 = opacity 1.0 1.0,class:^(kitty)$
+    windowrulev2 = opacity 0.85 0.85,class:^(kitty)$
     windowrulev2 = workspace 1 silent,class:^(kitty)$
-    windowrulev2 = noborder,class:^(kitty)$
     windowrulev2 = noshadow,class:^(kitty)$
-    windowrulev2 = noblur,class:^(kitty)$
-    windowrulev2 = nodim,class:^(kitty)$
     windowrulev2 = rounding 0,class:^(kitty)$
-    windowrulev2 = noanim,class:^(kitty)$
   '';
 } 

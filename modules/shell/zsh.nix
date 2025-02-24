@@ -26,7 +26,6 @@
 
     initExtra = ''
       eval "$(zoxide init zsh)"
-      ${pkgs.fastfetch}/bin/fastfetch
 
       # Better completion behavior
       zstyle ':completion:*' menu select

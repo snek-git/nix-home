@@ -25,16 +25,17 @@
     };
 
     style = ''
-      /* Reusing colors from Kitty */
+      /* Reusing colors from Kitty but with more subtle accents */
       @define-color background #11111b;
       @define-color foreground #f0c674;
-      @define-color accent #ff3c3c;
+      @define-color accent #00bfff;     /* Changed from red to a softer cyan/blue */
       @define-color surface #1c1c28;
+      @define-color selection #384048;   /* Added darker selection color */
 
       window {
         margin: 0px;
         padding: 10px;
-        border: 1px solid @accent;
+        border: 1px solid alpha(@accent, 0.5);  /* Made border more transparent */
         border-radius: 8px;
         background-color: alpha(@background, 0.95);
         font-family: "JetBrainsMono Nerd Font";
@@ -82,12 +83,13 @@
       }
 
       #entry:selected {
-        background-color: alpha(@accent, 0.9);
+        background-color: alpha(@selection, 0.7);  /* More subtle selection background */
+        border: 1px solid alpha(@accent, 0.3);     /* Subtle accent border */
         border-radius: 8px;
       }
 
       #entry:selected #text {
-        color: @background;
+        color: @accent;  /* Selected text uses accent color instead of background */
       }
     '';
   };
