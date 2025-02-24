@@ -7,7 +7,7 @@
   wayland.windowManager.hyprland.extraConfig = ''
     # Variables
     $mainMod = SUPER
-    $terminal = wezterm
+    $terminal = kitty
     $menu = wofi --show drun
     $browser = zed
     $fileManager = dolphin
@@ -37,8 +37,8 @@
     bind = , XF86AudioPrev, exec, playerctl previous
     
     # Brightness controls
-    bind = , XF86MonBrightnessUp, exec, brightnessctl set +5%
-    bind = , XF86MonBrightnessDown, exec, brightnessctl set 5%-
+    bind = , XF86MonBrightnessUp, exec, xbacklight -inc 5
+    bind = , XF86MonBrightnessDown, exec, xbacklight -dec 5
     
     # Move focus
     bind = $mainMod, left, movefocus, l

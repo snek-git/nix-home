@@ -23,15 +23,13 @@
     wofi            # Application launcher (used in binds.nix)
     dunst           # Notification daemon (used in autostart.nix)
     swww            # Wallpaper daemon (used in autostart.nix)
+    kitty           # Terminal emulator
     
     # Screenshot utilities (used in binds.nix)
     grim            # Screenshot utility
     slurp           # Screen region selection
     wl-clipboard    # Clipboard manager
     wf-recorder     # Screen recording
-    
-    # Audio/Brightness controls (used in binds.nix)
-    brightnessctl   # Brightness control
     
     # System tray utilities (used in autostart.nix)
     networkmanagerapplet
