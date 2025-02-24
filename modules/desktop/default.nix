@@ -5,7 +5,5 @@
       (name: builtins.match ".*\\.nix" name != null && name != "default.nix")
       (builtins.attrNames files);
   in
-    (map (name: ./. + "/${name}") nixFiles) ++ [
-      ./hyprland
-    ];
+    (map (name: ./. + "/${name}") nixFiles);
 } 

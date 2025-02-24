@@ -80,6 +80,7 @@
     bind = , escape, submap, reset
     submap = reset
 
-    bind = $mainMod ALT, W, exec, find /mnt/hdd1/Pics/wp/tiles -type f \( -name "*.png" -o -name "*.jpg" \) | shuf -n 1 | xargs -I {} swww img "{}" --transition-fps 144 --transition-type wipe --transition-duration 1 --transition-step 255 --resize fit --fill-color 000000
+    # Wallpaper cycling
+    bind = $mainMod ALT, W, exec, WALL=$(find /mnt/hdd1/Pics/wp/tiles -type f \( -name "*.png" -o -name "*.jpg" \) | shuf -n 1) && hyprctl hyprpaper preload $WALL && hyprctl hyprpaper wallpaper "DP-1,$WALL" && hyprctl hyprpaper wallpaper "DP-2,$WALL"
   '';
 } 
