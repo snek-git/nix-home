@@ -7,6 +7,5 @@
   in
     (map (name: ./. + "/${name}") nixFiles) ++ [
       ./hyprland
-      ./waybar
     ];
 } 

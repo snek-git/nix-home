@@ -9,6 +9,8 @@
     ./binds.nix
     ./autostart.nix
     ./theme.nix
+    ./waybar.nix
+    ./wofi.nix
   ];
 
   wayland.windowManager.hyprland = {
