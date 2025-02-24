@@ -107,7 +107,6 @@
     
     # Terminal rules
     windowrulev2 = opacity 0.85 0.85,class:^(kitty)$
-    windowrulev2 = workspace 1 silent,class:^(kitty)$
     windowrulev2 = noshadow,class:^(kitty)$
     windowrulev2 = rounding 0,class:^(kitty)$
   '';

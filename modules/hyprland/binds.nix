@@ -22,9 +22,11 @@
     bind = $mainMod, J, togglesplit,
     bind = $mainMod, B, exec, $browser
 
-    bind = , Print, exec, grim -g "$(slurp)" - | wl-copy
-    bind = $mainMod, Print, exec, grim -g "$(slurp)" ~/Pictures/Screenshots/$(date +'%Y%m%d_%H%M%S').png
-    bind = $mainMod SHIFT, Print, exec, grim ~/Pictures/Screenshots/$(date +'%Y%m%d_%H%M%S').png
+    # Screenshot (Alt+P) - copy to clipboard
+    bind = ALT, P, exec, grim -g "$(slurp)" - | wl-copy
+
+    # Screen recording (Ctrl+Alt+P) - copy to clipboard
+    bind = CTRL ALT, P, exec, wf-recorder -g "$(slurp)" -f /tmp/recording.mp4 && cat /tmp/recording.mp4 | wl-copy && rm /tmp/recording.mp4
 
     bind = , XF86AudioRaiseVolume, exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
     bind = , XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
