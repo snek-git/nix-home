@@ -102,8 +102,8 @@
       taa = "terraform apply --auto-approve";
       
       # Misc
-      pbc = "xclip -selection clipboard";
-      zrc = "nvim ~/.zshrc";
+      pbc = "wl-copy";
+      conf = "cursor ~/.config/home-manager";
       
       # Directory navigation
       ".." = "cd ..";
