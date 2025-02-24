@@ -31,7 +31,6 @@
     wf-recorder     # Screen recording
     
     # Audio/Brightness controls (used in binds.nix)
-    pamixer         # Audio control
     brightnessctl   # Brightness control
     
     # System tray utilities (used in autostart.nix)
