@@ -19,5 +19,6 @@
     ./modules/programs
     ./modules/desktop
     ./modules/services
+    ./modules/hyprland
   ];
 }
