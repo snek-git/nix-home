@@ -23,8 +23,8 @@
     GTK_THEME = "Dracula";
     ICON_THEME = "Papirus-Dark";
     
-    # Qt applications
-    QT_QPA_PLATFORMTHEME = "qt5ct";
+    # Qt applications - using mkForce to ensure this takes precedence
+    QT_QPA_PLATFORMTHEME = lib.mkForce "qt5ct";
     QT_STYLE_OVERRIDE = "kvantum";
     
     # Cursor theme

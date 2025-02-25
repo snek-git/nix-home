@@ -6,23 +6,14 @@
 }: {
   # Enable KDE/Plasma integration
   home.packages = with pkgs; [
-    # KDE core integration
-    kdePackages.kservice
-    kdePackages.kio
-    kdePackages.kiconthemes
-    kdePackages.kded
-    kdePackages.kconfig
-    kdePackages.kdeclarative
-    kdePackages.kglobalaccel
-    kdePackages.kdbusaddons
+    # Core KDE packages - only keeping the ones that certainly exist
     kdePackages.dolphin
+    kdePackages.kio
     kdePackages.dolphin-plugins
-    kdePackages.kio-extras
-    kdePackages.kimageformats
     
-    # Qt Wayland support
-    qt6.qtwayland  # Directly from qt6, not through kdePackages
-
+    # Qt support
+    qt6.qtwayland
+    
     # XDG and file type handling
     shared-mime-info
     xdg-utils
@@ -32,12 +23,6 @@
     # Portals for Wayland integration
     xdg-desktop-portal
     xdg-desktop-portal-kde
-
-    # Additional KDE frameworks
-    kdePackages.kactivities
-    kdePackages.kfilemetadata
-    kdePackages.baloo
-    kdePackages.kmime
   ];
 
   # Ensure XDG directories are properly set up
@@ -55,9 +40,9 @@
   # KDE-specific environment variables - these will be used when running Plasma
   # but won't override Hyprland variables when in Hyprland
   home.sessionVariables = {
-    # This is the only shared variable needed for both DEs to properly
-    # handle Qt theming - keeping just this one here
-    QT_QPA_PLATFORMTHEME = "kde";
+    # Using mkForce to ensure this takes effect when needed but doesn't 
+    # conflict with other definitions
+    QT_QPA_PLATFORMTHEME = lib.mkDefault "kde";
     
     # These environment variables are specific to KDE and will only matter
     # when running in the Plasma session
