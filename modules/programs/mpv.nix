@@ -28,8 +28,8 @@
       
       # Screenshots - save in a "screenshots" folder next to the video file
       screenshot-format = "png";
-      screenshot-directory = "./screenshots/${filename/}";  # Relative to the video folder
-      screenshot-template = "%P";
+      screenshot-directory = "./screenshots/";  # Relative to the video folder
+      screenshot-template = "%F-%P";  # Includes filename in the screenshot name
     };
   };
 }
