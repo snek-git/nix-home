@@ -12,7 +12,6 @@
     kdePackages.kiconthemes
     kdePackages.kded
     kdePackages.kconfig
-    kdePackages.kinit
     kdePackages.kdeclarative
     kdePackages.kglobalaccel
     kdePackages.kdbusaddons
