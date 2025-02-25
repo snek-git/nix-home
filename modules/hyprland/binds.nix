@@ -7,9 +7,9 @@
   wayland.windowManager.hyprland.extraConfig = ''
     $mainMod = SUPER
     $terminal = kitty
-    $menu = wofi --show drun
+    $menu = killall wofi || wofi --show drun
     $browser = zen
-    $fileManager = dolphin
+    $fileManager = nautilus
 
     bind = $mainMod, RETURN, exec, $terminal
     bind = $mainMod, Q, killactive,
@@ -17,7 +17,7 @@
     bind = $mainMod, E, exec, $fileManager
     bind = $mainMod, V, togglefloating,
     bind = $mainMod, SPACE, exec, $menu
-    bind = $mainMod, R, exec, wofi --show run
+    bind = $mainMod, R, exec, killall wofi || wofi --show run
     bind = $mainMod, P, pseudo,
     bind = $mainMod, J, togglesplit,
     bind = $mainMod, B, exec, $browser
@@ -25,8 +25,13 @@
     # Screenshot (Alt+P) - copy to clipboard
     bind = ALT, P, exec, grim -g "$(slurp)" - | wl-copy
 
-    # Screen recording (Ctrl+Alt+P) - copy to clipboard
-    bind = CTRL ALT, P, exec, wf-recorder -g "$(slurp)" -f /tmp/recording.mp4 && cat /tmp/recording.mp4 | wl-copy && rm /tmp/recording.mp4
+    # Screen recording (Ctrl+Alt+P) - save to Videos
+    bind = CTRL ALT, P, exec, mkdir -p /mnt/hdd1/Videos/Recordings/screen && FILE=/mnt/hdd1/Videos/Recordings/screen/$(date +'recording_%Y%m%d_%H%M%S.mp4') && notify-send "Recording Started" "Will save to:\n$FILE" && wf-recorder -g "$(slurp)" -f "$FILE"
+    # Stop screen recording (F14)
+    bind = , F14, exec, killall -SIGINT wf-recorder && notify-send "Recording Stopped" "Saved to:\n$(ls -t /mnt/hdd1/Videos/Recordings/screen/recording_* | head -n1)"
+
+    # Clipboard history
+    bind = $mainMod SHIFT, V, exec, killall wofi || cliphist list | wofi --dmenu | cliphist decode | wl-copy
 
     bind = , XF86AudioRaiseVolume, exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
     bind = , XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
@@ -83,6 +88,6 @@
     submap = reset
 
     # Wallpaper cycling
-    bind = $mainMod ALT, W, exec, WALL=$(find /mnt/hdd1/Pics/wp/tiles -type f \( -name "*.png" -o -name "*.jpg" \) | shuf -n 1) && hyprctl hyprpaper preload $WALL && hyprctl hyprpaper wallpaper "DP-1,$WALL" && hyprctl hyprpaper wallpaper "DP-2,$WALL"
+    bind = $mainMod ALT, W, exec, WALL=$(find /mnt/hdd1/Pics/wp/tiles -type f \( -name "*.png" -o -name "*.jpg" \) | shuf -n 1) && hyprctl hyprpaper preload "$WALL" && hyprctl hyprpaper wallpaper "DP-1,tile:$WALL" && hyprctl hyprpaper wallpaper "DP-2,tile:$WALL"
   '';
 } 
