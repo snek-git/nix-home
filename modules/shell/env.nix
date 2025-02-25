@@ -16,6 +16,10 @@
     PROTON_ENABLE_NGX_UPDATER = "1";
     VKD3D_CONFIG = "dxr";
     RADV_PERFTEST = "gpl";
+    
+    # Disable MangoHud globally by default
+    MANGOHUD = "0";
+    MANGOHUD_DLSYM = "0";
   };
 
   # Add custom scripts to ~/.local/bin
@@ -26,6 +30,10 @@
     };
     ".local/bin/nix-install" = {
       source = ../scripts/nix-install.sh;
+      executable = true;
+    };
+    ".local/bin/game-launcher" = {
+      source = ../scripts/game-launcher.sh;
       executable = true;
     };
   };

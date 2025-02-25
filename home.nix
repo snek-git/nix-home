@@ -20,5 +20,6 @@
     ./modules/desktop
     ./modules/services
     ./modules/hyprland
+    ./modules/gaming
   ];
 }
