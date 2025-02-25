@@ -1,13 +1,16 @@
 {...}: {
   home.sessionVariables = {
+    # Editor and basic environment
     EDITOR = "nvim";
     NIXPKGS_ALLOW_UNFREE = "1";
     MANPAGER = "sh -c 'col -bx | bat -l man -p'";
     PAGER = "less -R";
+    
+    # Tool configuration
     FZF_DEFAULT_OPTS = "--height 40% --layout=reverse --border";
     ZEN_BROWSER_HOME = "~/.local/share/zen-browser";
 
-    # Gaming-specific variables
+    # Gaming-specific variables - these complement system-level variables
     PROTON_ENABLE_NVAPI = "1";
     PROTON_HIDE_NVIDIA_GPU = "0";
     PROTON_ENABLE_NGX_UPDATER = "1";

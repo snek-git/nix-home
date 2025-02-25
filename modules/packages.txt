@@ -1,88 +1,112 @@
+# Core terminal tools
 tmux
 fastfetch
 zoxide
 xclip
 file
 neovim
+zellij
+
+# Git tools
 lazygit
 gh
 glab
 difftastic
 delta
+
+# Shell utilities
 direnv
+eza
+bat
+ripgrep
+fd
+jq
+yq
+tree
+bottom
+duf
+ncdu
+fzf
+procs
+sd
+choose
+du-dust
 hyperfine
 tokei
 shellcheck
 glow
+
+# Development tools
 gcc
 python3
 nodejs
 vscode
+code-cursor
 postman
+zed
+
+# Language servers
 rust-analyzer
 typescript-language-server
 vscode-langservers-extracted
 pyright
 gopls
+
+# Kubernetes
 kubectl
 kubectx
 k9s
 kubernetes-helm
 kustomize
 stern
-bat
-eza
-ripgrep
-fd
-jq
-yq
-tree
-htop
-bottom
-duf
-ncdu
-fzf
-zellij
-procs
-sd
-choose
-du-dust
+
+# Nix tools
 nix-prefetch-git
 nixpkgs-fmt
 nix-tree
 nix-index
 comma
+
+# Communication
 telegram-desktop
 vesktop
-btop
-mpv
-zed
 slack
+thunderbird
+
+# Media
+mpv
 spotify
+obs-studio
+
+# System utilities
+btop
 openrgb-with-all-plugins
 teamspeak5_client
 obsidian
-code-cursor
 transmission_4
 google-chrome
-thunderbird
 kate
 corectrl
+wget
+
+# Gaming
 wine-stable
 winetricks
 mangohud
 gamemode
 lutris
 protonup-qt
+
+# Fonts
 fira-code
 jetbrains-mono
 hack
 vt323
+
+# Misc
 neofetch
-wget
 pycharm-community
 _1password-gui
 _1password-cli
 warp-terminal
 libgcc
-obs-studio
