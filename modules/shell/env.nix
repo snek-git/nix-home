@@ -17,9 +17,8 @@
     VKD3D_CONFIG = "dxr";
     RADV_PERFTEST = "gpl";
     
-    # Disable MangoHud globally by default
-    MANGOHUD = "0";
-    MANGOHUD_DLSYM = "0";
+    # Removed the global MangoHud disabling which was causing problems
+    # Let the whitelist in MangoHud.conf handle this instead
   };
 
   # Add custom scripts to ~/.local/bin

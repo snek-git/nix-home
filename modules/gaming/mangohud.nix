@@ -27,8 +27,13 @@
     frame_timing=1
     frametime
 
-    # Only enable MangoHud for these specific applications (whitelist approach)
+    # Extensive whitelist to include most games
     whitelist_only=1
-    whitelist=steam,lutris,gamescope,game,steam_app,steamwebhelper,X3.exe,vkbasalt,proton,wine,wine64,vintenpro.exe,rpcs3,zenith.exe
+    whitelist=steam,lutris,gamescope,game,steam_app,steamwebhelper,proton,wine,wine64,
+              abaltro,abaltro.exe,baldursgate3.exe,baldursgate3,bg3,bg3.exe,
+              vkbasalt,rpcs3,zenith.exe,X3.exe,vintenpro.exe,
+              lutris-wrapper,wine-lutris,steam-runtime,
+              GOG,gog,epic,EpicGamesLauncher,
+              java,minecraft,Minecraft.exe
   '';
 } 
