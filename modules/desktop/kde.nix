@@ -42,16 +42,6 @@
   # Ensure XDG directories are properly set up
   xdg = {
     enable = true;
-    systemDirs = {
-      data = [
-        "${config.home.homeDirectory}/.nix-profile/share"
-        "/run/current-system/sw/share"
-      ];
-      applications = [
-        "${config.home.homeDirectory}/.nix-profile/share/applications"
-        "/run/current-system/sw/share/applications"
-      ];
-    };
     userDirs = {
       enable = true;
       createDirectories = true;
