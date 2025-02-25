@@ -42,14 +42,14 @@
       GAMEMODERUNEXEC = "env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only";
       
       # Graphics variables
-      PROTON_ENABLE_NVAPI = "1";
+      # PROTON_ENABLE_NVAPI = "1";  # Let Proton decide when to use NVAPI
       PROTON_HIDE_NVIDIA_GPU = "0";
-      PROTON_ENABLE_NGX_UPDATER = "1";
-      VKD3D_CONFIG = "dxr";
-      RADV_PERFTEST = "gpl";
+      # PROTON_ENABLE_NGX_UPDATER = "1";  # This might cause issues with some games
+      # VKD3D_CONFIG = "dxr";  # This might cause issues with some games that don't support ray tracing
+      # RADV_PERFTEST = "gpl";  # This might not be compatible with some games
       
       # Wayland specific
-      SDL_VIDEODRIVER = "wayland";
+      # SDL_VIDEODRIVER = "wayland";  # This might be causing issues with some games, let SDL decide
       GDK_BACKEND = lib.mkDefault "wayland";
       CLUTTER_BACKEND = "wayland";
       
@@ -71,14 +71,12 @@
   home.file.".config/autostart/steam.desktop".text = ''
     [Desktop Entry]
     Name=Steam
-    Exec=steam -nochatui -nofriendsui -silent %U
+    Exec=steam %U
     Icon=steam
     Terminal=false
     Type=Application
     Categories=Network;FileTransfer;Game;
     MimeType=x-scheme-handler/steam;x-scheme-handler/steamlink;
     Actions=Store;Community;Library;Servers;Screenshots;News;Settings;BigPicture;Friends;
-    PrefersNonDefaultGPU=true
-    X-KDE-RunOnDiscreteGpu=true
   '';
 } 

@@ -10,15 +10,12 @@
     FZF_DEFAULT_OPTS = "--height 40% --layout=reverse --border";
     ZEN_BROWSER_HOME = "~/.local/share/zen-browser";
 
-    # Gaming-specific variables - these complement system-level variables
-    PROTON_ENABLE_NVAPI = "1";
-    PROTON_HIDE_NVIDIA_GPU = "0";
-    PROTON_ENABLE_NGX_UPDATER = "1";
-    VKD3D_CONFIG = "dxr";
-    RADV_PERFTEST = "gpl";
-    
-    # Removed the global MangoHud disabling which was causing problems
-    # Let the whitelist in MangoHud.conf handle this instead
+    # Gaming-specific variables - only including the essential ones
+    # PROTON_ENABLE_NVAPI = "1";  # Let games/Proton decide
+    # PROTON_HIDE_NVIDIA_GPU = "0";  # Let games/Proton decide
+    # PROTON_ENABLE_NGX_UPDATER = "1";  # This can cause issues with some games
+    # VKD3D_CONFIG = "dxr";  # This can cause issues with some games
+    # RADV_PERFTEST = "gpl";  # This can cause issues with some games
   };
 
   # Add custom scripts to ~/.local/bin
