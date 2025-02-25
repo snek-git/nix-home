@@ -74,7 +74,6 @@ slack
 thunderbird
 
 # Media
-mpv
 spotify
 obs-studio
 
