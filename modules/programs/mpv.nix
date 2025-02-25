@@ -26,9 +26,9 @@
       osd-font = "JetBrainsMono Nerd Font";
       osd-font-size = 24;
       
-      # Screenshots
+      # Screenshots - save in a "screenshots" folder next to the video file
       screenshot-format = "png";
-      screenshot-directory = "screenshots/${filename}";
+      screenshot-directory = "./screenshots/${filename/}";  # Relative to the video folder
       screenshot-template = "%P";
     };
   };
