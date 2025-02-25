@@ -19,7 +19,9 @@
     kdePackages.dolphin-plugins
     kdePackages.kio-extras
     kdePackages.kimageformats
-    kdePackages.qt6.qtwayland
+    
+    # Qt Wayland support
+    qt6.qtwayland  # Directly from qt6, not through kdePackages
 
     # XDG and file type handling
     shared-mime-info
