@@ -97,6 +97,7 @@
     # Misc
     misc {
         force_default_wallpaper = 0
+        disable_hyprland_logo = true
     }
 
     # Window rules
@@ -104,6 +105,16 @@
     windowrule = float, ^(blueman-manager)$
     windowrule = float, ^(nm-connection-editor)$
     windowrule = float, ^(org.kde.polkit-kde-authentication-agent-1)$
+    
+    # Vesktop screen sharing compatibility
+    windowrulev2 = workspace 2,class:^(vesktop)$
+    windowrulev2 = stayfocused,title:^(.*)(vesktop.*picker.*)$,class:^(vesktop)$
+    windowrulev2 = float,title:^(.*)(vesktop.*picker.*)$,class:^(vesktop)$
+    
+    # Regular Discord rules
+    windowrulev2 = workspace 2,class:^(discord)$
+    windowrulev2 = stayfocused,title:^(.*)(Screen Share)(.*)$,class:^(discord)$
+    windowrulev2 = float,title:^(.*)(Screen Share)(.*)$,class:^(discord)$
     
     # Terminal rules
     windowrulev2 = opacity 0.85 0.85,class:^(kitty)$

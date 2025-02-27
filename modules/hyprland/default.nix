@@ -12,7 +12,9 @@
     ./waybar.nix
     ./wofi.nix
     ./hyprpaper.nix
-  ];
+  ] 
+  ++ lib.optional (builtins.pathExists ./hypridle.nix) ./hypridle.nix
+  ++ lib.optional (builtins.pathExists ./hyprlock.nix) ./hyprlock.nix;
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -48,6 +50,8 @@
     dunst           # Notification daemon (used in autostart.nix)
     hyprpaper       # Wallpaper daemon
     kitty           # Terminal emulator
+    hyprlock        # Hyprland's lock screen utility
+    hypridle        # Hyprland's idle daemon
     
     # GNOME/GTK File Management
     nautilus        # File manager (GTK-based)

@@ -103,8 +103,7 @@
       
       # Misc
       pbc = "wl-copy";
-      conf = "cursor ~/.config/home-manager";
-      
+      conf = "cursor ~/.config/home-manager > /dev/null 2>&1 &";      
       # Directory navigation
       ".." = "cd ..";
       "..." = "cd ../..";

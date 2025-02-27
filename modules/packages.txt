@@ -70,19 +70,27 @@ comma
 # Communication
 telegram-desktop
 vesktop
+discord
 slack
 thunderbird
 
 # Media
 spotify
+vlc
 obs-studio
+gst_all_1.gstreamer
+gst_all_1.gst-plugins-base
+gst_all_1.gst-plugins-good
+gst_all_1.gst-plugins-bad
+gst_all_1.gst-plugins-ugly
+gst_all_1.gst-libav
 
 # System utilities
 btop
 openrgb-with-all-plugins
 teamspeak5_client
 obsidian
-transmission_4
+transmission_4-gtk
 google-chrome
 kate
 corectrl
