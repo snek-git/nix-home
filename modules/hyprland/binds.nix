@@ -20,7 +20,7 @@
     bind = $mainMod, R, exec, killall wofi || wofi --show run
     bind = $mainMod, P, pseudo,
     bind = $mainMod, J, togglesplit,
-    bind = $mainMod, B, exec, zen,
+    bind = $mainMod, B, exec, $browser,
     bind = $mainMod, F, fullscreen,
 
     # Screenshot (Alt+P) - copy to clipboard
