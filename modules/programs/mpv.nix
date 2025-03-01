@@ -68,7 +68,7 @@
       # Video quality settings
       scale = "ewa_lanczossharp";               # High quality video scaling
       dscale = "mitchell";                      # High quality downscaling
-      cscale = "ewa_lanczossoft";               # High quality chroma scaling
+      cscale = "spline36";                      # High quality chroma scaling compatible with gpu-next
       correct-downscaling = "yes";              # Improves downscaling quality
       linear-downscaling = "yes";               # Improves downscaling quality
       sigmoid-upscaling = "yes";                # Reduces upscaling artifacts
@@ -172,41 +172,64 @@
   
   # Add script-opts for the various scripts if they exist
   home.file = {
+    ".config/mpv/script-opts/mpv_thumbnail_script.conf" = lib.mkIf (pkgs ? mpvScripts.thumbnail) {
+      text = ''
+        # Thumbnail cache directory
+        cache_directory=/tmp/mpv_thumbs_cache
+        
+        # Thumbnail dimensions
+        thumbnail_width=300
+        thumbnail_height=200
+        
+        # Maximum thumbnails
+        thumbnail_count=100
+      '';
+    };
+    
     ".config/mpv/script-opts/videoclip.conf" = lib.mkIf (pkgs ? mpvScripts.videoclip) {
       text = ''
-        # Output directory
-        dir=~/Videos/mpv-clips
+        # Paths for videos and audio clips
+        video_folder_path=~/Videos/mpv-clips
+        audio_folder_path=~/Music/mpv-clips
         
-        # Output format
-        format=mp4
+        # Menu settings
+        font_size=24
+        osd_align=7
+        osd_outline=1.5
         
-        # Video quality (bitrate)
-        bitrate=8000
+        # Filename settings
+        clean_filename=yes
         
-        # Include subtitles
-        sub=yes
+        # Video settings
+        video_width=-2
+        video_height=480
+        video_bitrate=1M
+        video_format=mp4
+        video_quality=23
+        preset=faster
+        video_fps=auto
         
-        # Keep original audio
-        audio=yes
-        
-        # Skip encoding if possible
-        reencode=no
+        # Audio settings
+        audio_format=opus
+        audio_bitrate=32k
       '';
     };
     
     ".config/mpv/script-opts/thumbfast.conf" = lib.mkIf (pkgs ? mpvScripts.thumbfast) {
       text = ''
-        # Thumbnail size
-        thumbnail_width=320
+        # Thumbnail settings
+        socket=/tmp/thumbfast
+        max_height=200
+        max_width=200
         
-        # Keep thumbnails after video is closed
-        autodelete=no
+        # Performance settings
+        spawn_first=yes
+        quit_after_inactivity=300
         
-        # Thumbnail display mode
-        accurate=yes
-        
-        # Number of thumbnails to generate at once
-        workers=4
+        # Feature toggles
+        network=no
+        audio=no
+        hwdec=yes
       '';
     };
   };
