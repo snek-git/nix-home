@@ -6,6 +6,7 @@ xclip
 file
 neovim
 zellij
+ghostty
 
 # Git tools
 lazygit
