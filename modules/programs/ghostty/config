@@ -1,0 +1,79 @@
+# Font settings
+font-family = JetBrainsMono Nerd Font
+font-size = 11
+
+# Window appearance
+window-padding-x = 8
+window-padding-y = 4
+background-opacity = 0.85
+background-blur = true
+confirm-close-surface = false
+
+# Theme and colors - Evangelion/Cyberpunk theme
+foreground = #f0c674
+background = #11111b
+cursor-color = #ff3c3c
+cursor-text = #11111b
+selection-foreground = #11111b
+selection-background = #73c936
+
+# Normal colors (black, red, green, yellow, blue, magenta, cyan, white)
+palette = 1c1c28 ff3c3c 73c936 ff7f00 00bfff ff1493 03fff7 f0c674
+# Bright colors (bright black, red, green, yellow, blue, magenta, cyan, white)
+palette = 384048 ff6c6c 96ff4c ffa74d 48d1ff ff69b4 43fff8 ffffd4
+
+# Tab bar
+tab-bar = true
+tab-bar-position = bottom
+
+# Cursor
+cursor = block
+cursor-blink-rate = 500
+
+# Performance and rendering options
+gpu-acceleration = true
+
+# Ghostty-specific features
+scrollback-lines = 10000
+shell-integration-features = cursor,sudo
+sixel = true
+kitty-keyboard-protocol = true
+kitty-graphics-protocol = true
+
+# Advanced rendering features
+antialiasing = true
+
+# Ligatures and Unicode
+font-feature = liga
+font-feature = calt
+
+# Mouse settings
+mouse-hide-while-typing = true
+copy-on-select = clipboard
+
+# Terminal bells
+bell = none
+bell-flash = false
+visual-bell = true
+
+# Window features
+window-decorations = false
+window-inherit-working-directory = true
+
+# Match Kitty keybindings
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+keybind = ctrl+shift+plus=increase_font_size
+keybind = ctrl+shift+minus=decrease_font_size
+keybind = ctrl+shift+backspace=reset_font_size
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+q=close_surface
+keybind = ctrl+shift+l=next_tab
+keybind = ctrl+shift+h=previous_tab
+keybind = ctrl+shift+.=move_tab:1
+keybind = ctrl+shift+,=move_tab:-1
+
+# Additional Ghostty-specific keybindings
+keybind = ctrl+shift+f=toggle_fullscreen
+keybind = ctrl+shift+o=toggle_opacity
+keybind = ctrl+shift+r=reload_config 

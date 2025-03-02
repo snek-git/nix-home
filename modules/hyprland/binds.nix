@@ -6,7 +6,7 @@
 }: {
   wayland.windowManager.hyprland.extraConfig = ''
     $mainMod = SUPER
-    $terminal = kitty
+    $terminal = ghostty
     $menu = killall wofi || wofi --show drun
     $browser = zen
     $fileManager = nautilus
