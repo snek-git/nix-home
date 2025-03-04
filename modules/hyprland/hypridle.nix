@@ -5,7 +5,7 @@
   ...
 }: {
   # Create hypridle configuration
-  xdg.configFile."hypridle/hypridle.conf".text = ''
+  xdg.configFile."hypr/hypridle.conf".text = ''
     general {
       # Lock screen after 5 minutes
       lock_cmd = hyprlock
