@@ -67,12 +67,14 @@
     wl-clipboard    # Clipboard manager
     cliphist        # Clipboard history
     wf-recorder     # Screen recording
+    killall         # Kill all instances of a program
     
     # System tray utilities (used in autostart.nix)
     networkmanagerapplet
     blueman         # Bluetooth
     pavucontrol     # Audio control GUI
     libnotify       # Notification library
+    
     
     # Theme-related (needed for Wayland/Hyprland theming)
     qt5.qtwayland   # Qt5 wayland

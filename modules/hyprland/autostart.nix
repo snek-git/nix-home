@@ -13,6 +13,7 @@
     exec-once = /nix/store/$(ls -la /nix/store | grep polkit-kde-agent | grep '^d' | awk '{print $9}')/libexec/polkit-kde-authentication-agent-1
     exec-once = hypridle
     exec-once = 1password --silent
-    exec-once = transmission-gtk
+    exec-once = transmission-gtk --minimized
+    exec-once = telegram-desktop -startintray
   '';
 } 

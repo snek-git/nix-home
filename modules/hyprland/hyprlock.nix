@@ -16,7 +16,7 @@
     background {
       monitor =
       path = screenshot
-      color = rgba(25, 20, 20, 1.0)
+      color = rgb(25, 20, 20)
       blur_passes = 2
       blur_size = 7
       noise = 0.0117
@@ -43,8 +43,8 @@
 
     label {
       monitor =
-      text = Enter password to unlock
-      color = rgba(200, 200, 200, 1.0)
+      text = HAHAHAHAHAHAHA
+      color = rgb(200, 200, 200)
       font_size = 25
       font_family = Noto Sans
       position = 0, 70

@@ -41,8 +41,12 @@
     bind = , XF86AudioNext, exec, playerctl next
     bind = , XF86AudioPrev, exec, playerctl previous
 
-    bind = , XF86MonBrightnessUp, exec, xbacklight -inc 5
-    bind = , XF86MonBrightnessDown, exec, xbacklight -dec 5
+    # Monitor brightness control using ddcutil
+    bind = , XF86MonBrightnessUp, exec, ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 2
+    bind = , XF86MonBrightnessDown, exec, ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 2
+    # Alternative brightness controls (if keyboard doesn't have brightness keys)
+    bind = $mainMod SHIFT, F1, exec, ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 2
+    bind = $mainMod SHIFT, F2, exec, ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 2
 
     bind = $mainMod, left, movefocus, l
     bind = $mainMod, right, movefocus, r

@@ -24,6 +24,7 @@
         ];
         modules-center = ["clock"];
         modules-right = [
+          "custom-brightness"
           "network"
           "cpu"
           "memory"
@@ -112,6 +113,18 @@
           tooltip = true;
         };
 
+        "custom-brightness" = {
+          exec = "${pkgs.ddcutil}/bin/ddcutil getvcp 10 --display 1 | grep -oP 'current value = \\K\\d+' | xargs -I{} echo '{\"text\": \"󰃠 {}%\", \"tooltip\": \"Brightness: {}%\"}'";
+          return-type = "json";
+          interval = 5;
+          format = "{}";
+          on-scroll-up = "${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 2";
+          on-scroll-down = "${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 2";
+          on-click = "${pkgs.ddcutil}/bin/ddcutil getvcp 10 --display 1 | grep -oP 'current value = \\K\\d+' | xargs -I{} notify-send 'Monitor 1 Brightness' '{}%'";
+          on-click-right = "${pkgs.ddcutil}/bin/ddcutil getvcp 10 --display 2 | grep -oP 'current value = \\K\\d+' | xargs -I{} notify-send 'Monitor 2 Brightness' '{}%'";
+          tooltip = true;
+        };
+
         "tray" = {
           icon-size = 21;
           spacing = 10;
@@ -162,6 +175,7 @@
       #memory,
       #network,
       #wireplumber,
+      #custom-brightness,
       #tray {
         padding: 0 10px;
         margin: 2px 4px;
@@ -202,6 +216,12 @@
         color: #03fff7;
       }
 
+      #custom-brightness {
+        color: #ffcc00;
+        font-weight: bold;
+        min-width: 70px;
+      }
+
       #cpu {
         color: #73c936;
         margin-right: 0;
@@ -235,5 +255,7 @@
     lm_sensors # For temperature monitoring
     gtk3 # For GTK3 support
     gtk4 # For GTK4 support
+    ddcutil # For monitor brightness control
+    libnotify # For notifications
   ];
 } 
