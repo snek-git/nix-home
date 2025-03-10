@@ -41,6 +41,9 @@
     GTK_THEME = "Dracula";
     GTK_USE_PORTAL = "1";  # Ensure file chooser modal works properly
     GSETTINGS_SCHEMA_DIR = "/run/current-system/sw/share/gsettings-schemas/:/home/snek/.nix-profile/share/gsettings-schemas/";
+    
+    # Prefer GTK portal for file picker
+    XDG_DESKTOP_PORTAL_USE_PORTAL = "1";
   };
 
   home.packages = with pkgs; [
@@ -83,5 +86,23 @@
     gtk4            # GTK4 for newer Wayland apps
     papirus-icon-theme
     dracula-theme
+    
+    # XDG portal utilities
+    xdg-desktop-portal
+    xdg-desktop-portal-gtk # For GTK file dialogs (Nautilus)
+    xdg-desktop-portal-hyprland # Hyprland portal integration
+    glib # For gsettings
   ];
+
+  # Set Nautilus as the default file manager
+  xdg.mimeApps.defaultApplications = {
+    "inode/directory" = ["org.gnome.Nautilus.desktop"];
+  };
+
+  # Set portal configuration file
+  xdg.configFile."xdg-desktop-portal/portals.conf".text = ''
+    [preferred]
+    default=gtk
+    org.freedesktop.impl.portal.FileChooser=gtk
+  '';
 } 

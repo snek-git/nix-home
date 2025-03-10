@@ -41,12 +41,12 @@
     bind = , XF86AudioNext, exec, playerctl next
     bind = , XF86AudioPrev, exec, playerctl previous
 
-    # Monitor brightness control using ddcutil
-    bind = , XF86MonBrightnessUp, exec, ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 2
-    bind = , XF86MonBrightnessDown, exec, ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 2
-    # Alternative brightness controls (if keyboard doesn't have brightness keys)
-    bind = $mainMod SHIFT, F1, exec, ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 2
-    bind = $mainMod SHIFT, F2, exec, ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 2
+    # Monitor brightness control using our optimized script
+    bind = , XF86MonBrightnessUp, exec, ${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh up 5
+    bind = , XF86MonBrightnessDown, exec, ${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh down 5
+    # Alternative brightness controls
+    bind = $mainMod SHIFT, F3, exec, ${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh up 10
+    bind = $mainMod SHIFT, F2, exec, ${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh down 10
 
     bind = $mainMod, left, movefocus, l
     bind = $mainMod, right, movefocus, r

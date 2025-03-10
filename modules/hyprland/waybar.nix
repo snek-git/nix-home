@@ -118,10 +118,10 @@
           return-type = "json";
           interval = 5;
           format = "{}";
-          on-scroll-up = "${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 + 10 --display 2";
-          on-scroll-down = "${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 1 && ${pkgs.ddcutil}/bin/ddcutil setvcp 10 - 10 --display 2";
-          on-click = "${pkgs.ddcutil}/bin/ddcutil getvcp 10 --display 1 | grep -oP 'current value = \\K\\d+' | xargs -I{} notify-send 'Monitor 1 Brightness' '{}%'";
-          on-click-right = "${pkgs.ddcutil}/bin/ddcutil getvcp 10 --display 2 | grep -oP 'current value = \\K\\d+' | xargs -I{} notify-send 'Monitor 2 Brightness' '{}%'";
+          on-scroll-up = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh up 5";
+          on-scroll-down = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh down 5";
+          on-click = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh up 10";
+          on-click-right = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh down 10";
           tooltip = true;
         };
 

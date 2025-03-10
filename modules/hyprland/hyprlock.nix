@@ -5,7 +5,7 @@
   ...
 }: {
   # Create hyprlock configuration
-  xdg.configFile."hyprlock/hyprlock.conf".text = ''
+  xdg.configFile."hypr/hyprlock.conf".text = ''
     general {
       disable_loading_bar = false
       hide_cursor = true
