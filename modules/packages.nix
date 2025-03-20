@@ -53,6 +53,23 @@
   ];
 
 in {
-  nixpkgs.config.allowUnfree = true;
-  home.packages = regularPackages ++ specialPackages;
+  nixpkgs.config = {
+    allowUnfree = true;
+    
+    # Explicitly allow specific unfree packages
+    allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      "claude-code"
+      "code-cursor"
+      "google-chrome"
+      "_1password-gui"
+      "discord"
+      "spotify"
+      "teamspeak5_client"
+      "vscode"
+      "obsidian"
+    ];
+  };
+  
+  # Add claude-code separately to ensure it's properly handled
+  home.packages = regularPackages ++ specialPackages ++ [ pkgs.claude-code ];
 } 

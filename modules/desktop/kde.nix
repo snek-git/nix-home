@@ -22,7 +22,7 @@
 
     # Portals for Wayland integration
     xdg-desktop-portal
-    xdg-desktop-portal-kde
+    kdePackages.xdg-desktop-portal-kde
   ];
 
   # Ensure XDG directories are properly set up

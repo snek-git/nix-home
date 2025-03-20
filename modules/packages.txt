@@ -43,6 +43,7 @@ python3
 nodejs
 vscode
 code-cursor
+docker-compose
 postman
 zed
 cloudflared
