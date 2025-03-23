@@ -189,8 +189,8 @@
     ".config/mpv/script-opts/videoclip.conf" = lib.mkIf (pkgs ? mpvScripts.videoclip) {
       text = ''
         # Paths for videos and audio clips
-        video_folder_path=~/Videos/mpv-clips
-        audio_folder_path=~/Music/mpv-clips
+        video_folder_path=/home/snek/Videos/mpv-clips
+        audio_folder_path=/home/snek/Music/mpv-clips
         
         # Menu settings
         font_size=24
