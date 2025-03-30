@@ -12,6 +12,7 @@
       autoload
       videoclip
       thumbfast
+      uosc 
     ];
     
     config = {
@@ -23,7 +24,7 @@
       autofit-larger = "100%x100%";
       
       # OSC (On Screen Controller)
-      osc = "no";  # Disable default OSC for thumbnail script
+      # osc = "no"; # Removed/Commented out to allow uosc to function
       
       # Audio
       volume = 100;
@@ -81,6 +82,9 @@
       deband-range = 16;                        # Deband range
       deband-grain = 5;                         # Add a bit of grain to cover artifacts
       
+      # Display settings
+      override-display-fps = 0;                 # Match display FPS to video FPS if possible
+      
       # For clips/recording (options for videoclip script if available)
       video-sync = "display-resample";          # Improves smoothness of clips
     };
@@ -117,9 +121,9 @@
     
     # Custom key bindings
     bindings = {
-      "Ctrl+s" = "screenshot";        # Screenshot with subtitles, no OSD
-      "Alt+s" = "screenshot window";  # Screenshot with OSD and subtitles
-      "Shift+s" = "screenshot video"; # Screenshot without subtitles or OSD
+      "Ctrl+s" = "screenshot ; run sh -c \"wl-copy < '${screenshot-filename}'\"";        # Screenshot with subtitles, no OSD, copy to clipboard
+      "Alt+s" = "screenshot window ; run sh -c \"wl-copy < '${screenshot-filename}'\"";  # Screenshot with OSD and subtitles, copy to clipboard
+      "Shift+s" = "screenshot video ; run sh -c \"wl-copy < '${screenshot-filename}'\""; # Screenshot without subtitles or OSD, copy to clipboard
       
       # Video clip creation bindings
       "c" = "script-binding videoclip/videoclip-menu-open";     # Open videoclip menu

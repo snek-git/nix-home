@@ -47,6 +47,7 @@ docker-compose
 postman
 zed
 cloudflared
+uv
 
 # Language servers
 rust-analyzer
