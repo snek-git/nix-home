@@ -205,7 +205,7 @@
       
       # Misc
       pbc = "wl-copy";
-      conf = "nohup cursor ~/.config/home-manager > /dev/null 2>&1 & disown";      
+      conf = "nohup code ~/.config/home-manager > /dev/null 2>&1 & disown";      
       # Directory navigation
       ".." = "cd ..";
       "..." = "cd ../..";

@@ -28,6 +28,7 @@
       volume = 100;
       volume-max = 200;
       audio-channels = "auto-safe";
+      audio-device = "pipewire";
       
       # General
       keep-open = "yes";
@@ -189,8 +190,8 @@
     ".config/mpv/script-opts/videoclip.conf" = lib.mkIf (pkgs ? mpvScripts.videoclip) {
       text = ''
         # Paths for videos and audio clips
-        video_folder_path=/home/snek/Videos/mpv-clips
-        audio_folder_path=/home/snek/Music/mpv-clips
+        video_folder_path=${config.home.homeDirectory}/Videos/mpv-clips
+        audio_folder_path=${config.home.homeDirectory}/Music/mpv-clips
         
         # Menu settings
         font_size=24
