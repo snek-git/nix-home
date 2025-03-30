@@ -65,7 +65,7 @@ update_home_manager() {
     if [[ -f "$HOME/.config/home-manager/flake.nix" ]]; then
         echo -e "${BLUE}Using flake-based home-manager...${NC}"
         cd "$HOME/.config/home-manager" || exit
-        home-manager switch --flake ".#"
+        home-manager switch --flake ".#snek"
     else
         echo -e "${BLUE}Using channel-based home-manager...${NC}"
         home-manager switch
@@ -81,7 +81,7 @@ update_with_unstable() {
     # Then update home-manager with the updated flakes
     echo -e "${BLUE}Applying home-manager configuration with unstable packages...${NC}"
     cd "$HOME/.config/home-manager" || exit
-    home-manager switch --flake ".#"
+    home-manager switch --flake ".#snek"
     
     echo -e "${GREEN}Unstable packages (like claude-code) should now be updated!${NC}"
 }
@@ -138,4 +138,4 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo -e "${GREEN}Update completed!${NC}" 
+echo -e "${GREEN}Update completed!${NC}"

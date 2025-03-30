@@ -9,9 +9,10 @@
     scripts = with pkgs.mpvScripts; [
       mpris
       sponsorblock
-      thumbnail  # Seekbar thumbnails
-    ] ++ lib.optionals (pkgs ? mpvScripts.videoclip) [ pkgs.mpvScripts.videoclip ]  # Add videoclip if available
-      ++ lib.optionals (pkgs ? mpvScripts.thumbfast) [ pkgs.mpvScripts.thumbfast ]; # Add thumbfast if available
+      autoload
+      videoclip
+      thumbfast
+    ];
     
     config = {
       # Video
@@ -39,6 +40,7 @@
       osd-font-size = 24;
       osd-duration = 2000;  # OSD messages display for 2 seconds
       osd-bar = "yes";
+      # TODO(Felix): Verify OSD bar behavior with osc=no. Relying on thumbfast/scripts for seek preview?
       
       # Improved player behavior
       force-seekable = "yes";  # Force seekability for better user experience
@@ -59,7 +61,7 @@
       
       # Screenshots - save in a "screenshots" folder next to the video file
       screenshot-format = "png";
-      "screenshot-directory" = "~/Pictures/screenshots";  # Directory path of the video + /screenshots/
+      "screenshot-directory" = "${config.home.homeDirectory}/Pictures/screenshots";  # Directory path of the video + /screenshots/
       screenshot-template = "%F/%wH-%wM-%wS";            # Filename without extension + timestamp without colons
       screenshot-high-bit-depth = "yes";        # Match source bit depth when possible
       screenshot-png-compression = 7;           # 0-9, higher means better compression but slower
@@ -97,30 +99,6 @@
         profile-desc = "Settings for recording clips";
         screenshot-format = "png"; # Use PNG for clips/thumbnails
         osd-level = 1;            # Show minimal OSD during recording
-      };
-      
-      # Profile for lower performance systems
-      "low-power" = {
-        profile-desc = "Settings for low-power devices";
-        scale = "bilinear";
-        cscale = "bilinear";
-        dscale = "bilinear";
-        scale-antiring = 0;
-        cscale-antiring = 0;
-        dither-depth = "no";
-        hwdec = "auto";
-        vo = "gpu";
-        # Disable intensive filters
-        deband = "no";
-        sigmoid-upscaling = "no";
-      };
-      
-      # Profile for battery saving on laptops
-      "battery" = {
-        profile-desc = "Battery saving settings";
-        video-sync = "display-resample";
-        hwdec = "auto";
-        vo = "gpu";
       };
       
       # Profile for watching anime
@@ -173,20 +151,6 @@
   
   # Add script-opts for the various scripts if they exist
   home.file = {
-    ".config/mpv/script-opts/mpv_thumbnail_script.conf" = lib.mkIf (pkgs ? mpvScripts.thumbnail) {
-      text = ''
-        # Thumbnail cache directory
-        cache_directory=/tmp/mpv_thumbs_cache
-        
-        # Thumbnail dimensions
-        thumbnail_width=300
-        thumbnail_height=200
-        
-        # Maximum thumbnails
-        thumbnail_count=100
-      '';
-    };
-    
     ".config/mpv/script-opts/videoclip.conf" = lib.mkIf (pkgs ? mpvScripts.videoclip) {
       text = ''
         # Paths for videos and audio clips
