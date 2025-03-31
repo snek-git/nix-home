@@ -121,9 +121,10 @@
     
     # Custom key bindings
     bindings = {
-      "Ctrl+s" = "screenshot ; run sh -c \"wl-copy < '${screenshot-filename}'\"";        # Screenshot with subtitles, no OSD, copy to clipboard
-      "Alt+s" = "screenshot window ; run sh -c \"wl-copy < '${screenshot-filename}'\"";  # Screenshot with OSD and subtitles, copy to clipboard
-      "Shift+s" = "screenshot video ; run sh -c \"wl-copy < '${screenshot-filename}'\""; # Screenshot without subtitles or OSD, copy to clipboard
+      # Use clipshot.lua script bindings
+      "Ctrl+s" = "script-binding clipshot-subs";    # Screenshot with subtitles, copy to clipboard
+      "Alt+s" = "script-binding clipshot-window";   # Screenshot window, copy to clipboard
+      "Shift+s" = "script-binding clipshot-video";  # Screenshot video only, copy to clipboard
       
       # Video clip creation bindings
       "c" = "script-binding videoclip/videoclip-menu-open";     # Open videoclip menu
@@ -200,6 +201,11 @@
         audio=no
         hwdec=yes
       '';
+    };
+
+    # Add the clipshot.lua script
+    ".config/mpv/scripts/clipshot.lua" = {
+      source = ./mpv/clipshot.lua; # Reference the external Lua script file relative to this nix file
     };
   };
 }

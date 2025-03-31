@@ -101,18 +101,18 @@
     }
 
     # Window rules
-    windowrule = float, ^(pavucontrol)$
-    windowrule = float, ^(blueman-manager)$
-    windowrule = float, ^(nm-connection-editor)$
-    windowrule = float, ^(org.kde.polkit-kde-authentication-agent-1)$
+    windowrulev2 = float, class:^(pavucontrol)$
+    windowrulev2 = float, class:^(blueman-manager)$
+    windowrulev2 = float, class:^(nm-connection-editor)$
+    windowrulev2 = float, class:^(org.kde.polkit-kde-authentication-agent-1)$
     
     # Vesktop screen sharing compatibility
-    windowrulev2 = workspace 2,class:^(vesktop)$
+    windowrulev2 = workspace name:2,class:^(vesktop)$
     windowrulev2 = stayfocused,title:^(.*)(vesktop.*picker.*)$,class:^(vesktop)$
     windowrulev2 = float,title:^(.*)(vesktop.*picker.*)$,class:^(vesktop)$
     
     # Regular Discord rules
-    windowrulev2 = workspace 2,class:^(discord)$
+    windowrulev2 = workspace name:2,class:^(discord)$
     windowrulev2 = stayfocused,title:^(.*)(Screen Share)(.*)$,class:^(discord)$
     windowrulev2 = float,title:^(.*)(Screen Share)(.*)$,class:^(discord)$
     
@@ -121,4 +121,4 @@
     windowrulev2 = noshadow,class:^(kitty)$
     windowrulev2 = rounding 0,class:^(kitty)$
   '';
-} 
+}
