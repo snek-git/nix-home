@@ -205,7 +205,7 @@
 
     # Add the clipshot.lua script
     ".config/mpv/scripts/clipshot.lua" = {
-      source = ./mpv/clipshot.lua; # Reference the external Lua script file relative to this nix file
+      source = ./mpv/clipshot.lua; # Reference the external Lua script file using relative path
     };
   };
 }
