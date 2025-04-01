@@ -114,15 +114,13 @@
         };
 
         "custom-brightness" = {
-          exec = "${pkgs.ddcutil}/bin/ddcutil getvcp 10 --display 1 | grep -oP 'current value = \\K\\d+' | xargs -I{} echo '{\"text\": \"󰃠 {}%\", \"tooltip\": \"Brightness: {}%\"}'";
-          return-type = "json";
-          interval = 5;
-          format = "{}";
-          on-scroll-up = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh up 5";
-          on-scroll-down = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh down 5";
-          on-click = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh up 10";
-          on-click-right = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh down 10";
-          tooltip = true;
+          exec = "ddcutil -b 18 getvcp 10 -t | perl -nE 'if (/ C (\\d+) /) { say $1; }' || echo '0'";
+          exec-if = "sleep 1";
+          format = "{}% {icon}";
+          format-icons = ["󰃠"];
+          interval = 1;
+          on-scroll-up = "ddcutil -b 18 setvcp 10 + 10";
+          on-scroll-down = "ddcutil -b 18 setvcp 10 - 10";
         };
 
         "tray" = {
@@ -220,6 +218,9 @@
         color: #ffcc00;
         font-weight: bold;
         min-width: 70px;
+        background: #1c1c28;
+        padding: 0 10px;
+        margin: 2px 4px;
       }
 
       #cpu {
