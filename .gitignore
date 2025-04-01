@@ -2,9 +2,6 @@
 result
 result-*
 
-# System configuration
-configuration.nix
-
 # Project-specific
 zen-browser-flake/
 
