@@ -26,6 +26,16 @@ cd ~/.config/home-manager
 home-manager switch --flake .#snek
 ```
 
+5. **(Optional) Link System Configuration:**
+   If you want to manage your NixOS system configuration (`/etc/nixos/configuration.nix`) from this repository as well, back up your existing system configuration and create a symbolic link. Run these commands as root (e.g., using `sudo`):
+   ```bash
+   # Backup existing configuration (if it exists)
+   mv /etc/nixos/configuration.nix /etc/nixos/configuration.nix.backup
+   # Create symlink
+   ln -s ~/.config/home-manager/configuration.nix /etc/nixos/configuration.nix
+   ```
+   After linking, you can manage `configuration.nix` here and apply system changes with `sudo nixos-rebuild switch`.
+
 ## Structure
 
 - `flake.nix`: The entry point of the configuration
