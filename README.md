@@ -36,8 +36,11 @@ home-manager switch --flake .#snek
   - `desktop/`: Desktop environment configurations
   - `services/`: Service configurations
   - `hyprland/`: Hyprland window manager configuration
-  - `packages.nix`: List of all installed packages
-  - `scripts/`: Helper scripts for managing the system
+  - `gaming/`: Gaming-related packages and configurations
+  - `unstable-packages/`: Configurations using packages from unstable channels
+  - `packages.nix`: Processes `packages.txt` to generate the list of installed packages, handles special package overrides and defines allowed unfree packages.
+  - `packages.txt`: The primary list of package names to be installed (managed via `nix-install`).
+  - `scripts/`: Helper scripts for managing the system (e.g., `nix-install`, `nix-update`, `game-launcher`).
     - `nix-install`: Package management script with fzf integration
     - `nix-update`: System update script
 
@@ -115,11 +118,13 @@ nix-update -h
 
 ## Package Management
 
-Packages are managed through `modules/packages.txt` and handled by the `nix-install` script. The script automatically:
+Packages are primarily managed by adding package names to `modules/packages.txt` and using the `nix-install` script. The script automatically:
 - Verifies packages exist in nixpkgs
 - Maintains a backup of the package list
 - Rebuilds home-manager after changes
 - Rolls back on failures
+
+The `modules/packages.nix` file reads `packages.txt`, maps the names to Nix package attributes (handling special cases like nodePackages, nerd-fonts, etc.), adds specific overrides, and defines the `allowUnfreePredicate` list for necessary unfree packages.
 
 ## Updating
 
@@ -133,4 +138,8 @@ To update your entire system:
 nix-update -a
 ```
 
-To update specific components, use the appropriate flags with `nix-update` as shown in the Scripts section. 
+To update specific components, use the appropriate flags with `nix-update` as shown in the Scripts section.
+
+## AI Development Guidelines
+
+This repository includes AI guidelines located at `.cursor/rules/nix_guidelines.txt`. These rules provide context and instructions to AI assistants (like Cursor) to help ensure consistency and adherence to the project's structure and conventions when making changes to the Nix configuration. 

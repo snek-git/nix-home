@@ -1,0 +1,66 @@
+# Project Context and Structure
+SYSTEM_CONTEXT: |
+  You are an AI assistant helping manage a Nix Home Manager configuration using Flakes.
+  Key files and directories:
+  - flake.nix: Defines package inputs (nixpkgs, home-manager, zen-browser), outputs (homeConfigurations.snek), and basic user info.
+  - home.nix: Main entry point for the Home Manager configuration, imports modules from ./modules.
+  - modules/: Contains modularized parts of the configuration:
+    - packages.nix: Likely defines core packages. (Also see packages.txt and nix-install script described in README.md)
+    - shell/: Shell configuration (e.g., Zsh, Fish, aliases).
+    - programs/: Configuration for various user programs.
+    - desktop/: Desktop environment settings (themes, fonts, etc.).
+    - services/: User-level systemd services.
+    - hyprland/: Specific Hyprland window manager configuration.
+    - gaming/: Gaming-related packages or settings.
+    - unstable-packages/: Potentially for packages from unstable channels.
+    - scripts/: User scripts (e.g., nix-install, nix-update).
+  - configuration.nix: Separate NixOS system configuration (provides environmental context).
+  - README.md: Project documentation, including setup, structure, keybinds, and script usage.
+
+  General Workflow:
+  1. Understand the desired configuration change.
+  2. Identify the most relevant module directory/file within `modules/` or related files (e.g., `packages.txt`).
+  3. Apply changes following Nix syntax and Home Manager options, respecting existing patterns and scripts (like using `nix-install`'s workflow if adding packages to `packages.txt`).
+  4. If making significant structural changes (e.g., adding a new module directory to `modules/`), consider if `README.md` needs updating.
+  5. Suggest commands to test and apply the configuration.
+
+# File Management Rules
+ON_NIX_FILE_CHANGE: |
+  After modifying any `.nix` file (or related files like `packages.txt`):
+  1. Recommend checking syntax and formatting using `nix fmt .` in the project root (if applicable).
+  2. Suggest building/applying the configuration using `home-manager switch --flake .#snek` or the relevant custom script (e.g., `nix-update -h`).
+  3. If the build fails, analyze the error message and suggest corrections.
+  4. If a significant structural change was made (e.g., adding `./modules/new-module/`), ask the user if the 'Structure' section in `README.md` should be updated.
+  5. Verify the changes achieve the intended outcome after a successful build/script run.
+
+# Nix Language Guidelines
+NIX_GUIDELINES: |
+  - Follow Nixpkgs conventions and Home Manager options. Refer to Home Manager options documentation.
+  - Keep code readable and well-formatted (`nix fmt .`).
+  - Leverage the existing modular structure in `modules/`.
+  - Adhere to the package management workflow described in `README.md` (using `packages.txt` and `nix-install` script) if applicable.
+  - Add comments to explain complex configurations.
+  - When adding packages, use `pkgs.<packagename>` or the appropriate input name. Check `search.nixos.org`.
+
+# Configuration Structure Understanding
+READ_STRUCTURE: |
+  Primary files to understand configuration structure:
+  - README.md: Overview of structure and workflows.
+  - flake.nix: Inputs, outputs, basic user setup.
+  - home.nix: Top-level imports from `modules/`.
+  - modules/*: Specific configurations. Check `default.nix` or `index.nix` within module directories.
+  - modules/scripts/: Custom management scripts.
+
+  Analysis Steps:
+  1. Identify the user's goal.
+  2. Consult `README.md` for relevant workflows (e.g., package management).
+  3. Locate the relevant configuration file(s) within `modules/` or related files (`packages.txt`).
+  4. Ensure changes use correct options/syntax and integrate with existing modules/scripts.
+
+# Validation and Testing
+VALIDATION_RULES: |
+  1. Verify Nix syntax correctness (`nix fmt .`).
+  2. Check package names and option paths.
+  3. Ensure necessary inputs (`pkgs`, `lib`, etc.) are available.
+  4. Test using `home-manager switch --flake .#snek` or relevant scripts from `README.md`.
+  5. After success, advise manual verification and remind about potential `README.md` updates for structural changes. 
