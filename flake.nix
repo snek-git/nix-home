@@ -7,7 +7,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    zen-browser.url = "github:snek-git/zen-browser-flake";
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, zen-browser, ... }:
@@ -22,6 +25,7 @@
       homeConfigurations = {
         "snek" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
+          extraSpecialArgs = { inherit zen-browser; };
           modules = [ 
             ./home.nix
             {
@@ -29,7 +33,6 @@
                 username = "snek";
                 homeDirectory = "/home/snek";
                 packages = [
-                  zen-browser.packages.${system}.default
                 ];
               };
               nixpkgs.config.allowUnfree = true;

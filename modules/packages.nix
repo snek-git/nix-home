@@ -1,4 +1,4 @@
-{pkgs, lib, ...}: let
+{pkgs, lib, zen-browser, ...}: let
   # Read and parse packages.txt
   packagesFile = builtins.readFile ./packages.txt;
   packageLines = lib.splitString "\n" packagesFile;
@@ -71,5 +71,8 @@ in {
   };
   
   # Add claude-code separately to ensure it's properly handled
-  home.packages = regularPackages ++ specialPackages ++ [ pkgs.claude-code ];
+  home.packages = regularPackages ++ specialPackages ++ [ 
+    pkgs.claude-code 
+    zen-browser.packages.${pkgs.system}.default
+  ];
 } 
