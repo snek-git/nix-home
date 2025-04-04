@@ -3,7 +3,7 @@ result
 result-*
 
 # Project-specific
-zen-browser-flake/
+hardware-configuration.nix
 
 # Direnv
 .direnv/
