@@ -333,6 +333,18 @@
     cudaPackages.cudnn
   ];
 
+  environment.etc = {
+    "pipewire/pipewire.conf.d/92-low-latency.conf".text = ''
+      context.properties = {
+        default.clock.rate = 48000
+        default.clock.allowed-rates = [ 44100 48000 88200 96000 176400 192000 ]
+        default.clock.quantum = 256
+        default.clock.min-quantum = 32
+        default.clock.max-quantum = 8192
+      }
+    '';
+  };
+
   # Hardware configuration
   hardware = {
     i2c.enable = true;
@@ -370,6 +382,26 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      extraConfig.pipewire = {
+        "context.properties" = {
+          "link.max-buffers" = 16;
+          "log.level" = 2;
+          "default.clock.rate" = 48000;
+          "default.clock.quantum" = 256;
+          "default.clock.min-quantum" = 32;
+          "default.clock.max-quantum" = 8192;
+        };
+      };
+      # USB DAC specific settings
+      extraConfig.pipewire-pulse = {
+        "context.properties" = {
+          "pulse.min.req" = "32/48000";
+          "pulse.default.req" = "256/48000";
+          "pulse.max.req" = "256/48000";
+          "pulse.min.quantum" = "32/48000";
+          "pulse.max.quantum" = "256/48000";
+        };
+      };
     };
     lvm.enable = true;
     
@@ -470,7 +502,10 @@
     # Keychron V10 keyboard
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="03a1", MODE="0666"
     KERNEL=="hiddev*", SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="03a1", MODE="0666"
-  '';
+  
+  # Disable USB autosuspend for all audio devices
+  ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="01", ATTR{power/autosuspend}="-1"
+'';
 
   # Virtualization
   virtualisation.docker = {
@@ -487,7 +522,3 @@
 
   system.stateVersion = "24.11";
 }
-
-
-
-

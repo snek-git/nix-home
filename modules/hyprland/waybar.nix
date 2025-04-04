@@ -24,7 +24,7 @@
         ];
         modules-center = ["clock"];
         modules-right = [
-          "custom-brightness"
+          "custom/brightness"
           "network"
           "cpu"
           "memory"
@@ -59,8 +59,15 @@
         };
 
         "cpu" = {
-          format = "CPU: {usage}%";
+          interval = 1;
+          format = "{icon} {usage}% ";
+          format-icons = [" " "▂" "▃" "▄" "▅" "▆" "▇" "█"];
           tooltip = true;
+        };
+
+        "memory" = {
+          format = "RAM: {}%";
+          tooltip-format = "Memory: {used:0.1f}GB/{total:0.0f}GB";
           interval = 1;
         };
 
@@ -72,12 +79,6 @@
           interval = 2;
           tooltip = true;
           tooltip-format = "CPU Temperature: {temperatureC}°C";
-        };
-
-        "memory" = {
-          format = "RAM: {}%";
-          tooltip-format = "Memory: {used:0.1f}GB/{total:0.1f}GB";
-          interval = 1;
         };
 
         "network" = {
@@ -113,14 +114,12 @@
           tooltip = true;
         };
 
-        "custom-brightness" = {
-          exec = "ddcutil -b 18 getvcp 10 -t | perl -nE 'if (/ C (\\d+) /) { say $1; }' || echo '0'";
-          exec-if = "sleep 1";
-          format = "{}% {icon}";
-          format-icons = ["󰃠"];
-          interval = 1;
-          on-scroll-up = "ddcutil -b 18 setvcp 10 + 10";
-          on-scroll-down = "ddcutil -b 18 setvcp 10 - 10";
+        "custom/brightness" = {
+          exec = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh get | tail -n1";
+          format = "󰃠 {}%";
+          interval = 2;
+          on-scroll-up = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh up";
+          on-scroll-down = "${config.home.homeDirectory}/.config/home-manager/modules/hyprland/scripts/brightness.sh down";
         };
 
         "tray" = {
@@ -218,15 +217,10 @@
         color: #ffcc00;
         font-weight: bold;
         min-width: 70px;
-        background: #1c1c28;
-        padding: 0 10px;
-        margin: 2px 4px;
       }
 
       #cpu {
         color: #73c936;
-        margin-right: 0;
-        padding-right: 4px;
       }
 
       #memory {
@@ -258,5 +252,57 @@
     gtk4 # For GTK4 support
     ddcutil # For monitor brightness control
     libnotify # For notifications
+    wob # For brightness slider
+    # Dependencies for memory graph
+    procps    # Provides free
+    gawk      # For text processing in scripts
+    sparkline # For generating sparkline graphs
   ];
+
+  # Add wob configuration file
+  xdg.configFile."wob/wob.ini".text = ''
+    timeout = 1000
+    border_size = 1
+    margin = 100
+    border_color = ffcc00ff
+    bar_color = ffcc00ff
+    background_color = 1c1c28aa
+    height = 32
+  '';
+
+  # Add wob socket and service
+  systemd.user.sockets.wob = {
+    Socket = {
+      ListenFIFO = "%t/wob.sock";
+      SocketMode = "0600";
+    };
+    Install = {
+      WantedBy = ["sockets.target"];
+    };
+  };
+
+  systemd.user.services.wob = {
+    Unit = {
+      Description = "A lightweight overlay volume/backlight/progress/anything bar for Wayland";
+      PartOf = ["graphical-session.target"];
+      Requires = ["wob.socket"];
+      After = ["graphical-session.target" "wob.socket"];
+    };
+    Service = {
+      StandardInput = "socket";
+      ExecStart = "${pkgs.wob}/bin/wob";
+      Environment = [
+        "WAYLAND_DISPLAY=wayland-1"
+        "XDG_RUNTIME_DIR=/run/user/1000"
+      ];
+    };
+    Install = {
+      WantedBy = ["graphical-session.target"];
+    };
+  };
+
+  # Set environment variable for wob socket
+  home.sessionVariables = {
+    WOBSOCK = "$XDG_RUNTIME_DIR/wob.sock";
+  };
 } 
