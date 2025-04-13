@@ -17,7 +17,6 @@
     bind = $mainMod, E, exec, $fileManager
     bind = $mainMod, V, togglefloating,
     bind = $mainMod, SPACE, exec, $menu
-    bind = $mainMod, R, exec, killall wofi || wofi --show run
     bind = $mainMod, P, pseudo,
     bind = $mainMod, J, togglesplit,
     bind = $mainMod, B, exec, zen --new-window

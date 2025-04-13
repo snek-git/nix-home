@@ -30,7 +30,6 @@
       volume = 100;
       volume-max = 200;
       audio-channels = "auto-safe";
-      audio-device = "pipewire";
       
       # General
       keep-open = "yes";

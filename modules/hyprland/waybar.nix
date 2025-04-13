@@ -7,10 +7,7 @@
   programs.waybar = {
     enable = true;
     systemd.enable = true;
-    package = pkgs.waybar.override {
-      wireplumberSupport = true;
-      pulseSupport = true;
-    };
+    package = pkgs.waybar;
     settings = {
       mainBar = {
         layer = "top";
@@ -256,7 +253,6 @@
     # Dependencies for memory graph
     procps    # Provides free
     gawk      # For text processing in scripts
-    sparkline # For generating sparkline graphs
   ];
 
   # Add wob configuration file

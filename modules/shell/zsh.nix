@@ -165,9 +165,6 @@
       ll = "eza -l --icons --git";
       la = "eza -la --icons --git";
       lt = "eza --tree --level=2 --icons";
-      cat = "bat";
-      grep = "rg";
-      find = "fd";
       diff = "difft";
       cd = "z";      # Use z instead of cd
       

@@ -43,7 +43,7 @@
 
     label {
       monitor =
-      text = HAHAHAHAHAHAHA
+      text = Locked
       color = rgb(200, 200, 200)
       font_size = 25
       font_family = Noto Sans

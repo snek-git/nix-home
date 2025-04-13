@@ -4,6 +4,7 @@ result-*
 
 # Project-specific
 hardware-configuration.nix
+config_dump.txt
 
 # Direnv
 .direnv/

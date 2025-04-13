@@ -1,8 +1,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [ 
-    ./hardware-configuration.nix 
+  imports = [
+    ./hardware-configuration.nix
+    # Import the home-manager NixOS module
+    <home-manager/nixos>
   ];
 
   # Nix settings
@@ -30,8 +32,7 @@
       "--no-build-output"
       "--delete-older-than 30d"
     ];
-    # flake = "github:snek/nixos-config";  
-    persistent = true;
+    # flake = "github:snek/nixos-config";
     randomizedDelaySec = "45min";
     operation = "switch";
   
@@ -63,7 +64,7 @@
       "br_netfilter"
       "snd-seq"
       "snd-rawmidi"
-      "v4l2loopback"
+      # "v4l2loopback" # Removed, covered by extraModulePackages
     ];
     supportedFilesystems = [ "ntfs" "vfat" "lvm2"];
     kernelParams = [
@@ -235,20 +236,7 @@
       pkgs.xdg-desktop-portal-kde
       pkgs.xdg-desktop-portal-gtk
     ];
-    config = {
-      common = {
-        default = [ "hyprland" "gtk" "kde" ];
-      };
-      hyprland = {
-        default = [ "hyprland" "gtk" "kde" ];
-      };
-      kde = {
-        default = [ "kde" "hyprland" ];
-      };
-      gtk = {
-        default = [ "gtk" ];
-      };
-    };
+    # config = { ... }; # REMOVED THIS ENTIRE BLOCK
   };
 
   # Wayland-specific environment variables
@@ -268,10 +256,8 @@
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     WLR_NO_HARDWARE_CURSORS = "1";
     LIBVA_DRIVER_NAME = "nvidia";
-    
-    # greetd display settings - these will affect the login screen
-    WLR_DRM_DEVICES = "/dev/dri/card1";  # Use the NVIDIA GPU
-    WLR_DRM_CONNECTOR = "DP-2";          # Use the LG monitor
+    # WLR_DRM_DEVICES = "/dev/dri/card1"; # REMOVED
+    # WLR_DRM_CONNECTOR = "DP-2";       # REMOVED
   };
 
   # Create a wrapper script for tuigreet with specific environment variables
@@ -355,7 +341,7 @@
       modesetting.enable = true;
       open = false;
       nvidiaSettings = false;  # Disable the GUI settings tool
-      forceFullCompositionPipeline = true;
+      # forceFullCompositionPipeline = true; # REMOVED
       powerManagement.enable = true;
       package = config.boot.kernelPackages.nvidiaPackages.beta;
     };
@@ -365,51 +351,14 @@
   # System services
   services = {
     printing.enable = true;
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      extraConfig = {
-        pipewire = {
-          "context.properties" = {
-            "link.max-buffers" = 16;
-            "log.level" = 2;
-            "default.clock.rate" = 48000;
-            "default.clock.allowed-rates" = [ 44100 48000 88200 96000 176400 192000 ];
-            "default.clock.quantum" = 256;
-            "default.clock.min-quantum" = 32;
-            "default.clock.max-quantum" = 8192;
-          };
-        };
-        
-        pipewire-pulse = {
-          "context.properties" = {
-            "pulse.min.req" = "32/48000";
-            "pulse.default.req" = "256/48000";
-            "pulse.max.req" = "256/48000";
-            "pulse.min.quantum" = "32/48000";
-            "pulse.max.quantum" = "256/48000";
-          };
-          "stream.properties" = {
-            "node.latency" = "256/48000";
-            "resample.quality" = 7;
-          };
-        };
-        
-        client = {
-          "stream.properties" = {
-            "node.latency" = "256/48000";
-            "resample.quality" = 7;
-          };
-        };
-        
-        client.acp = {
-          "alsa.buffer-size" = 256;
-          "alsa.period-size" = 128;
-        };
-      };
-    };
+  # Updated PipeWire configuration
+  pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # No extra configuration
+  };
     lvm.enable = true;
     
     # Default TTY configuration (commented out the previous setting)
@@ -436,7 +385,7 @@
   users.users.snek = {
     isNormalUser = true;
     description = "snek";
-    extraGroups = [ "networkmanager" "i2c" "wheel" "storage" "disk" "docker" "video" "input" ];
+    extraGroups = [ "networkmanager" "i2c" "wheel" "storage" "disk" "docker" "video" "input" "audio" ];
     packages = with pkgs; [
       kdePackages.kate
       thunderbird
@@ -472,6 +421,16 @@
     forcePageTableIsolation = true;
     virtualisation.flushL1DataCache = "always";
     polkit.enable = true;
+    pam.loginLimits = [
+      { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
+      { domain = "@audio"; item = "rtprio"; type = "-"; value = "99"; }
+      { domain = "@audio"; item = "nofile"; type = "soft"; value = "99999"; }
+      { domain = "@audio"; item = "nofile"; type = "hard"; value = "99999"; }
+      
+      # Add explicit limits for your user
+      { domain = "snek"; item = "rtprio"; type = "-"; value = "99"; }
+      { domain = "snek"; item = "memlock"; type = "-"; value = "unlimited"; }
+    ];
   };
 
   # Shell configuration
@@ -512,6 +471,23 @@
   
   # Disable USB autosuspend for all audio devices
   ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="01", ATTR{power/autosuspend}="-1"
+
+  # Disable USB autosuspend for your FiiO K3 DAC specifically
+  ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="2972", ATTRS{idProduct}=="0055", ATTR{power/autosuspend}="-1"
+  
+  # Grant high priority scheduling to USB audio devices
+  SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="01", ATTR{bInterfaceSubClass}=="01", TAG+="uaccess", TAG+="udev-acl"
+  
+  # Add specific rules for FiiO devices
+  KERNEL=="pcmC[D0-9cp]*D[0-9]*c", ATTRS{idVendor}=="2972", ACTION=="add", PROGRAM="/bin/sh -c 'echo 8 > /sys$devpath/buffer_size'"
+  KERNEL=="pcmC[D0-9cp]*D[0-9]*p", ATTRS{idVendor}=="2972", ACTION=="add", PROGRAM="/bin/sh -c 'echo 8 > /sys$devpath/buffer_size'"
+
+  # FiiO K3 specific rule - more precise targeting
+  ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="2972", ATTRS{idProduct}=="0047", ATTR{power/autosuspend}="-1"
+  ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="2972", ATTRS{idProduct}=="0047", ATTR{power/control}="on"
+
+  # For the entire USB path
+  ACTION=="add", SUBSYSTEM=="usb", KERNELS=="3-1", ATTR{power/autosuspend}="-1"
 '';
 
   # Virtualization
@@ -526,6 +502,17 @@
   # Programs
   programs.firefox.enable = true;
   programs.dconf.enable = true;
+
+  # Home Manager configuration
+  home-manager = {
+    extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to home-manager
+    users = {
+      # Import your home-manager configuration (home.nix)
+      snek = import ./home.nix;
+    };
+    useGlobalPkgs = true; # Use system pkgs for HM where possible
+    useUserPackages = true; # Allow HM to manage user packages
+  };
 
   system.stateVersion = "24.11";
 }
