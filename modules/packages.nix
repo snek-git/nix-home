@@ -50,6 +50,7 @@
   specialPackages = with pkgs; [
     (terraform.overrideAttrs (old: { doCheck = false; }))
     (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.gke-gcloud-auth-plugin])
+    pkgs.stdenv.cc.cc
   ];
 
 in {
